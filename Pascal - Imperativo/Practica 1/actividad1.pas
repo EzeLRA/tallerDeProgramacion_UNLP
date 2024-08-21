@@ -24,5 +24,74 @@ program actividad1;
 	
 	h. Un módulo que muestre la información obtenida en el punto g).
 }
+const
+	dimF = 50;
+type
+	rang1 = 1..dimF;
+	codigo = 1..15;
+	cantRang = 0..99;
+	
+	venta = record
+		dia : integer;
+		cod : codigo;
+		cantVendido : cantRang;
+	end;
+		
+	
+	Ventas =array[rang1]of venta;
+
+procedure leerVenta(var v:venta);
+begin
+	randomize;
+	readln(v.dia);
+	if(v.dia <> 0)then begin
+		v.cod := random(15);
+		readln(v.cantVendido);
+	end;
+end;
+
+procedure cargarVector(var v:Ventas; var dl:integer);
+var
+	ven : venta;
+begin
+	leerVenta(ven);
+	while(ven.dia <>0)and(dl<dimF)do begin
+		dl:=dl+1;
+		v[dl] := ven;
+		if (dl<>dimF)then leerVenta(ven);
+	end;
+end;
+
+procedure mostrarVector(v:Ventas; dl:integer);
+var
+	i:integer;
+begin
+	for i:=1 to dl do begin
+		writeln(v[i].dia);
+		writeln(v[i].cod);
+		writeln(v[i].cantVendido);
+		writeln('');
+	end;
+end;
+
+procedure ordenarInsercion(var v:Ventas; dl:integer);
+var
+	aux:venta; i,j:integer;
+begin
+	for i:=2 to dl do begin
+		aux := v[i];
+		
+	end;
+
+end;
+
+
+
+VAR
+	v:Ventas;
+	dl:integer;
 BEGIN
+	dl:=0;
+	cargarVector(v,dl);
+	mostrarVector(v,dl);
 END.

@@ -46,6 +46,8 @@ begin
     end;
 end;
 
+//Comentario
+
 procedure AlmacenarInformacion (var v: vector; var dimL: rango3);	//A
 var unaVenta: venta;
 begin
@@ -137,35 +139,23 @@ begin
 end;
 
 
-
-
-procedure eliminarElem(var v:vector ; var dl:rango3 ; pos:rango3);
-var
-	i:integer;
-begin
-	if(pos >= 1)and(pos<dl)then begin
-		for i:=pos+1 to dl do
-			v[i-1] := v[i];
-		dl:= dl-1;
-	end;
-end;
-
-
 procedure Eliminar (var v: vector; var dimL: rango3; valorInferior, valorSuperior: rango1);
 var posInferior, posSuperior, salto, i: rango3; 
 Begin
   posInferior:= BuscarPosicion (v, dimL, valorInferior);
-  if (posInferior <> 0)
-  then begin
+  if (posInferior <> 0)then begin
          posSuperior:= BuscarPosicionDesde (v, dimL, posInferior, valorSuperior);
          
          {Escribir el código correspondiente para hacer el corrimiento y disminuir la dimensión lógica}
          
-         for i:=posInferior to posSuperior do
-			eliminarElem(v,dimL,posInferior);
-		
+         salto:= posSuperior - posInferior + 1;
+        
+         for i:= posSuperior+1 to dimL do begin
+			v[i-salto] := v[i];
+		 end;
+		 dimL:= dimL - salto;
          
-       end;
+  end;
 end;
 
 
