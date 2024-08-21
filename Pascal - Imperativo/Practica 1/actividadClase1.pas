@@ -46,7 +46,7 @@ begin
     end;
 end;
 
-procedure AlmacenarInformacion (var v: vector; var dimL: rango3);
+procedure AlmacenarInformacion (var v: vector; var dimL: rango3);	//A
 var unaVenta: venta;
 begin
     dimL := 0;
@@ -59,7 +59,7 @@ begin
     end;
 end;
 
-procedure ImprimirVector (v: vector; dimL: rango3);
+procedure ImprimirVector (v: vector; dimL: rango3);		//B  -  D  -  F
 var
    i: integer;
 begin
@@ -97,7 +97,7 @@ begin
      writeln;
 End;
 
-procedure Ordenar (var v: vector; dimL: rango3);
+procedure Ordenar (var v: vector; dimL: rango3);		//C
 var i, j, pos: rango3; item: venta;	
 begin
 	for i:= 1 to dimL - 1 do 
@@ -136,6 +136,21 @@ begin
                     else BuscarPosicionDesde:= pos - 1;
 end;
 
+
+
+
+procedure eliminarElem(var v:vector ; var dl:rango3 ; pos:rango3);
+var
+	i:integer;
+begin
+	if(pos >= 1)and(pos<dl)then begin
+		for i:=pos+1 to dl do
+			v[i-1] := v[i];
+		dl:= dl-1;
+	end;
+end;
+
+
 procedure Eliminar (var v: vector; var dimL: rango3; valorInferior, valorSuperior: rango1);
 var posInferior, posSuperior, salto, i: rango3; 
 Begin
@@ -145,6 +160,10 @@ Begin
          posSuperior:= BuscarPosicionDesde (v, dimL, posInferior, valorSuperior);
          
          {Escribir el código correspondiente para hacer el corrimiento y disminuir la dimensión lógica}
+         
+         for i:=posInferior to posSuperior do
+			eliminarElem(v,dimL,posInferior);
+		
          
        end;
 end;
@@ -156,13 +175,20 @@ end;
 
 
 procedure AgregarAdelante (var L: lista; elem: venta);
+var
+	nuevo:lista;
 begin
 	{ Completar }
+	new(nuevo);
+	nuevo^.dato:=elem;
+	nuevo^.sig:=L;
+	L:=nuevo;
 end;
   
 function Cumple (num: rango1): boolean;
 begin
 	{ Completar }
+	Cumple := ((num MOD 2)=0);
 end;
 
 procedure GenerarLista (v: vector; dimL: rango3; var L: lista);
@@ -176,6 +202,12 @@ end;
 procedure ImprimirLista (L: lista);
 begin
 	{ Completar }
+	while(L<>nil)do begin
+		writeln(L^.dato.dia);
+		writeln(L^.dato.codigoP);
+		writeln(L^.dato.cantidad);
+		L:=L^.sig;
+	end;
 end;
 
 
