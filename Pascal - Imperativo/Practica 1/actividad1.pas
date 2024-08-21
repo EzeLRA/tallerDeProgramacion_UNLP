@@ -25,7 +25,7 @@ program actividad1;
 	h. Un módulo que muestre la información obtenida en el punto g).
 }
 const
-	dimF = 50;
+	dimF = 5;
 type
 	rang1 = 1..dimF;
 	codigo = 1..15;
@@ -45,12 +45,12 @@ begin
 	randomize;
 	readln(v.dia);
 	if(v.dia <> 0)then begin
-		v.cod := random(15);
+		v.cod := random(15)+1;
 		readln(v.cantVendido);
 	end;
 end;
 
-procedure cargarVector(var v:Ventas; var dl:integer);
+procedure cargarVector(var v:Ventas; var dl:integer);	//A
 var
 	ven : venta;
 begin
@@ -62,7 +62,7 @@ begin
 	end;
 end;
 
-procedure mostrarVector(v:Ventas; dl:integer);
+procedure mostrarVector(v:Ventas; dl:integer);	//B - D - F
 var
 	i:integer;
 begin
@@ -74,18 +74,67 @@ begin
 	end;
 end;
 
-procedure ordenarInsercion(var v:Ventas; dl:integer);
+procedure ordenarInsercion(var v:Ventas; dl:integer);	//C
 var
 	aux:venta; i,j:integer;
 begin
 	for i:=2 to dl do begin
 		aux := v[i];
-		
+		j:= i-1;
+		while(j>0)and(v[j].cod>aux.cod)do begin
+			v[j+1] := v[j];
+			j:= j-1;
+		end;
+		v[j+1] := aux;
 	end;
 
 end;
 
 
+function buscarPosInferior(v:Ventas; dl:integer; cod:codigo):integer;
+var
+	pos:integer;
+begin
+	pos:=1;
+	while(pos<dl)and(v[pos].cod < cod)do begin
+		pos := pos + 1;
+	end;
+	
+	if(pos>dl)then buscarPosInferior:=0 else buscarPosInferior:=pos; 
+	
+end;
+
+function buscarPosSuperior(v:Ventas; dl:integer; cod:codigo):integer;
+var
+	pos:integer;
+begin
+	pos:=1;
+	while(pos<=dl)and(v[pos].cod <= cod)do begin
+		pos := pos + 1;
+	end;
+	
+	if(pos>dl)then buscarPosSuperior:=dl else buscarPosSuperior:=pos-1; 
+	
+end;
+
+
+procedure eliminarCodigos(var v:Ventas; var dl:integer; cod1,cod2:codigo);//E
+var 
+	posInferior, posSuperior, salto, i: integer; 
+begin
+	posInferior := buscarPosInferior(v,dl,cod1);
+	if (posInferior <> 0)then begin
+		posSuperior := buscarPosSuperior(v,dl,cod2);
+         
+        salto:= posSuperior - posInferior + 1;
+        
+        for i:= posSuperior+1 to dl do begin
+			v[i-salto] := v[i];
+		end;
+		dl:= dl - salto;
+         
+	end;
+end;
 
 VAR
 	v:Ventas;
@@ -94,4 +143,13 @@ BEGIN
 	dl:=0;
 	cargarVector(v,dl);
 	mostrarVector(v,dl);
+	ordenarInsercion(v,dl);
+	writeln('');
+	writeln('');
+	mostrarVector(v,dl);
+	writeln('');
+	writeln('');
+	eliminarCodigos(v,dl,1,2);
+	mostrarVector(v,dl);
+	//Ejercicio Resuelto en actividadClase1.pas
 END.
