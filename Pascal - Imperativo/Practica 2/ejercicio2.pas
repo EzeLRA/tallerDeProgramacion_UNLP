@@ -93,7 +93,9 @@ begin
 	obtenerMinimo := m;
 end;
 
-function buscarValor(l:lista; valor: integer): boolean;
+//Revisar
+
+function buscarValor(l:lista; valor: integer): boolean;	//E
 begin
 	if(l<>nil)then begin
 		if(valor = l^.dat)then BuscarValor:=true
