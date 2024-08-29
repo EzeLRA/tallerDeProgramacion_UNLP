@@ -40,6 +40,7 @@ type
 		HD:arbolAlumnos;
 	end;
 
+
 //Modulo A
 
 procedure cargarFinales(var l:listaFinales; f:finalRendido);
@@ -89,11 +90,117 @@ begin
 end;
 
 
+//Modulo Opcional
+
+procedure impresionLista(l:listaFinales);
+begin
+	while(l <> nil)do begin
+		writeln(l^.dat.codigoMateria);
+		writeln(l^.dat.fecha);
+		writeln(l^.dat.nota);
+		writeln;
+		l:=l^.sig;
+	end;
+end;
+
+procedure imprimirArbol(a:arbolAlumnos);
+begin
+	if(a <> nil)then begin
+		imprimirArbol(a^.HI);
+		writeln(a^.legajo);
+		impresionLista(a^.listaF);
+		imprimirArbol(a^.HD);
+	end;
+end;
+
+//Modulo B
+
+procedure retornarLegajosImpares(a:arbolAlumnos; var cant:integer);
+begin
+	if(a <> nil)then begin
+		imprimirArbol(a^.HI);
+		if((a^.legajo MOD 2)=1)then cant:= cant + 1;
+		imprimirArbol(a^.HD);
+	end;
+end;
+
+//Modulo C
+
+function contarFinalesA(l:listaFinales):integer;
+var
+	cant:integer;
+begin
+	cant:=0;
+	while(l <> nil)do begin
+		if(l^.dat.nota >= 4)then cant:=cant+1;
+		l:=l^.sig;
+	end;
+	contarFinalesA:=cant;
+end;
+
+procedure informarFinalesAprobados(a:arbolAlumnos);
+begin
+	if(a <> nil)then begin
+		informarFinalesAprobados(a^.HI);
+		writeln(a^.legajo);
+		writeln(contarFinalesA(a^.listaF));
+		informarFinalesAprobados(a^.HD);
+	end;
+end;
+
+//Modulo E
+
+function promedio(l:listaFinales):real;
+var
+	cant,notas:integer;
+begin
+	notas:=0;
+	cant:=0;
+	while(l <> nil)do begin
+		notas := notas + l^.dat.nota; 
+		cant:=cant+1;
+		l:=l^.sig;
+	end;
+	
+	if(cant > 0)then promedio := notas / cant
+	else promedio := 0;
+end;
+
+procedure alumnosPromedioMayorA(a:arbolAlumnos; prom:real);
+var
+	promAlu : real;
+begin
+	if(a <> nil)then begin
+		alumnosPromedioMayorA(a^.HI,prom);
+		promAlu := promedio(a^.listaF);
+		if(prom < promAlu)then begin
+			writeln(a^.legajo);
+			writeln(promAlu);
+		end;
+		alumnosPromedioMayorA(a^.HD,prom);
+	end;
+end;
+
+
 
 
 VAR
 	a:arbolAlumnos;
+	cantImp:integer;
+	prom:real;
 BEGIN
+
 	a:=nil;
-	leerFinales(a);
+	cantImp:=0;
+	
+	leerFinales(a);		//A
+	
+	retornarLegajosImpares(a,cantImp);	//B
+	writeln(cantImp);
+	
+	informarFinalesAprobados(a);	//C
+	
+	readln(prom);					//D
+	alumnosPromedioMayorA(a,prom);
+	
 END.

@@ -33,8 +33,6 @@ program ejercicio2;
 
 type
 	
-	//Corregir
-	
 	//Registro para Arbol 1
 	venta = record
 		codigoProducto: integer;
