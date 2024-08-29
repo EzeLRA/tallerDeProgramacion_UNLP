@@ -32,19 +32,59 @@ program ejercicio2;
 }
 
 type
+	
+	//Corregir
+	
+	//Registro para Arbol 1
 	venta = record
 		codigoProducto: integer;
-		fecha: integer;				//Se lo considera solo el dia (1..31)
+		fecha: integer;			
 		unidadesVendidas: integer;
 	end;
 	
-	arbol =^ nodo;
+	//Registro para Arbol 2
+	producto = record
+		codigo: integer;
+		unidadesT: integer;
+	end; 
 	
+	//Registro para Arbol 3
+	infoVen = record
+		fecha: integer;
+		unidadesVendidas: integer;
+	end;
+		//Lista
+		listaV =^ nodoL;
+		nodoL = record
+			dat : infoVen;
+			sig : listaV;
+		end;
+	
+	//Arbol 1
+	arbol =^ nodo;
 	nodo = record
 		dat : venta;
 		HI	: arbol;
 		HD	: arbol;
 	end;
+	
+	//Arbol 2
+	arbol2 =^ nodo2;
+	nodo2 = record
+		dat : producto;
+		HI : arbol2;
+		HD : arbol2;
+	end;
+	
+	//Arbol 3
+	arbol3 =^ nodo3;
+	nodo3 = record
+		cod : integer;
+		lista : listaV;
+		HI : arbol3;
+		HD : arbol3;
+	end;
+	
 	
 	
 	
@@ -53,7 +93,7 @@ procedure generarVenta(var v:venta);		//A
 begin
 	v.codigoProducto :=	random(51);
 	if(v.codigoProducto <> 0)then begin
-		v.fecha := random(32) + 1;
+		v.fecha := random(1000);
 		v.unidadesVendidas := random(100);
 		v.codigoProducto :=	random(51);
 	end;
@@ -78,52 +118,69 @@ begin
 		new(a);
 		a^.dat := v;
 		a^.HI := nil; a^.HD:=nil;
-	end else if(a^.dat.codigoProducto = v.codigoProducto)then
+	end else if(a^.dat.codigoProducto >= v.codigoProducto)then
 		insertarElem(a^.HD,v)
 	else if(a^.dat.codigoProducto < v.codigoProducto)then insertarElem(a^.HI,v);
 	
 end;
 
-procedure generarArbol1(var a:arbol);		//A - 1 - 3	//Este arbol almacena los codigos distintos por la izquierda y las iguales a la derecha
-			
-var
-	v:venta;
-begin
-	generarVenta(v);
-	while(v.codigoProducto <> 0)do begin
-		insertarElem(a,v);
-		generarVenta(v);
-	end;
-end;
-
-procedure insertarElem2(var a:arbol; v:venta);
+procedure insertarElem2(var a:arbol2; v:venta);
 begin
 	if(a = nil)then begin
 		new(a);
-		a^.dat := v;
+		a^.dat.codigo := v.codigoProducto;
+		a^.dat.unidadesT := v.unidadesVendidas;
 		a^.HI := nil; a^.HD:=nil;
-	end else if(a^.dat.codigoProducto > v.codigoProducto)then insertarElem2(a^.HD,v)
-	else if(a^.dat.codigoProducto < v.codigoProducto)then insertarElem2(a^.HI,v)
-	else a^.dat.unidadesVendidas := a^.dat.unidadesVendidas + v.unidadesVendidas;
+	end else if(a^.dat.codigo > v.codigoProducto)then insertarElem2(a^.HD,v)
+	else if(a^.dat.codigo < v.codigoProducto)then insertarElem2(a^.HI,v)
+	else a^.dat.unidadesT := a^.dat.unidadesT + v.unidadesVendidas;
 end;
 
-procedure generarArbol2(var a:arbol);		//A - 2		Este arbol guarda en los codigos repetidos la suma de las unidades vendidas(No tiene codigos repetidos)
+procedure agregarAdelante(var l:listaV; v:venta);
+var
+	n:listaV;
+begin
+	new(n);
+	n^.dat.fecha := v.fecha;
+	n^.dat.unidadesVendidas := v.unidadesVendidas;
+	n^.sig := l;
+	l := n;
+end;
+
+procedure insertarElem3(var a:arbol3; v:venta);
+begin
+	if(a = nil)then begin
+		new(a);
+		a^.cod := v.codigoProducto;
+		a^.lista := nil;
+		agregarAdelante(a^.lista,v);
+		a^.HI := nil; a^.HD:=nil;
+	end else if(a^.cod = v.codigoProducto)then
+		agregarAdelante(a^.lista,v)
+	else if(a^.cod < v.codigoProducto)then insertarElem3(a^.HI,v)
+	else if(a^.cod > v.codigoProducto)then insertarElem3(a^.HD,v);
+end;
+
+
+
+
+//Modulo A
+
+procedure retornarArboles(var a1:arbol; var a2:arbol2; var a3:arbol3);
 var
 	v:venta;
 begin
 	generarVenta(v);
 	while(v.codigoProducto <> 0)do begin
-		insertarElem2(a,v);
+		insertarElem(a1,v);
+		insertarElem2(a2,v);
+		insertarElem3(a3,v);
 		generarVenta(v);
 	end;
 end;
 
-procedure retornarArboles(var a1,a2,a3:arbol);
-begin
-	generarArbol1(a1);
-	generarArbol2(a2);
-	generarArbol1(a3);
-end;
+
+//Opcional
 
 procedure imprimirArbol(a:arbol);
 begin
@@ -133,6 +190,38 @@ begin
 		imprimirArbol(a^.HD);
 	end;
 end;
+
+procedure imprimirArbol2(a:arbol2);
+begin
+	if(a <> nil)then begin
+		imprimirArbol2(a^.HI);
+		writeln('Codigo: ',a^.dat.codigo);
+		writeln('Unidades Total: ',a^.dat.unidadesT);
+		writeln;
+		imprimirArbol2(a^.HD);
+	end;
+end;
+
+procedure imprimirLista(l:listaV);
+begin
+	while(l<>nil)do begin
+		writeln('fecha: ',l^.dat.fecha);
+		writeln('unidades vendidas: ',l^.dat.unidadesVendidas);
+		l := l^.sig;
+	end;
+end;
+
+procedure imprimirArbol3(a:arbol3);
+begin
+	if(a <> nil)then begin
+		imprimirArbol3(a^.HI);
+		writeln('Codigo: ',a^.cod);
+		imprimirLista(a^.lista);
+		writeln;
+		imprimirArbol3(a^.HD);
+	end;
+end;
+
 
 //B
 function sumarCantidadesFecha(a:arbol; f:integer):integer;
@@ -155,17 +244,17 @@ begin
 	end;
 end;
 	
-procedure codigoMasVenta(a: arbol; var maxCodigo: integer; var maxNum: integer);
+procedure codigoMasVenta(a:arbol2; var maxCodigo:integer; var maxNum:integer);
 begin
 	if (a <> nil) then
 	begin
-		actualizarMaximo(maxNum,maxCodigo,a^.dat.unidadesVendidas,a^.dat.codigoProducto);
+		actualizarMaximo(maxNum,maxCodigo,a^.dat.unidadesT,a^.dat.codigo);
 		codigoMasVenta(a^.HI, maxCodigo,maxNum);
 		codigoMasVenta(a^.HD, maxCodigo,maxNum);
 	end; 
 end;
 
-procedure obtenerMaximo(a:arbol);
+procedure obtenerMaximo(a:arbol2);
 var
 	maxNum,maxCod:integer;
 begin
@@ -179,29 +268,30 @@ end;
 
 
 //D
-procedure recorrerHojaDerecha(a:arbol; var cant:integer);
+procedure contarLista(l:listaV; var cant:integer);
 begin
-	while(a <> nil)do begin
+	while(l <> nil)do begin
 		cant := cant + 1;
-		a := a^.HD;
+		l := l^.sig;
 	end;
 end;
 
-procedure obtenerMaximoCodVentas(a:arbol; var maxNum,maxCodigo:integer);
+procedure obtenerMaximoCodVentas(a:arbol3; var maxNum,maxCodigo:integer);
 var
 	cant:integer;
 begin
 	if(a <> nil)then begin
 		cant := 1;
-		recorrerHojaDerecha(a^.HD,cant);
+		contarLista(a^.lista,cant);
 
-		actualizarMaximo(maxNum,maxCodigo,cant,a^.dat.codigoProducto);
+		actualizarMaximo(maxNum,maxCodigo,cant,a^.cod);
 		
 		obtenerMaximoCodVentas(a^.HI,maxNum,maxCodigo);
+		obtenerMaximoCodVentas(a^.HD,maxNum,maxCodigo);
 	end;
 end;
 
-procedure retornarMaxCodVentas(a:arbol);
+procedure retornarMaxCodVentas(a:arbol3);
 var
 	maxNum,maxCodigo:integer;
 begin
@@ -213,7 +303,9 @@ end;
 
 
 VAR
-	a1,a2,a3:arbol;
+	a1:arbol;
+	a2:arbol2;
+	a3:arbol3;
 	f:integer;
 BEGIN
 	randomize;
@@ -229,11 +321,15 @@ BEGIN
 	readln(f);
 	writeln('Cantidad total vendida en ese fecha: ',sumarCantidadesFecha(a1,f));
 	
-	writeln;
-	imprimirArbol(a2);
-	obtenerMaximo(a2);
 	
 	writeln;
-	imprimirArbol(a3);
+	imprimirArbol2(a2);
+	obtenerMaximo(a2);
+
+	
+	writeln;
+	imprimirArbol3(a3);
 	retornarMaxCodVentas(a3);
+	
 END.
+
