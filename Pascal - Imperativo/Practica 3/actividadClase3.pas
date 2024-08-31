@@ -16,7 +16,7 @@ b. Una vez generado el arbol, realice modulos independientes que reciban el arbo
 Program ImperativoClase3;
 
 type 
-		 rangoEdad = 12..100;
+     rangoEdad = 12..100;
      cadena15 = string [15];
      
      socio = record
