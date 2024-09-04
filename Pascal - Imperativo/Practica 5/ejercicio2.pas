@@ -27,9 +27,12 @@ program ejercicio2;
 	 modelo del auto con dicha patente.
 }
 
+const
+	dim1 = 2010;
+	dimF = 2018;
 type
 	
-	anios = 2010..2018;
+	anios = 2010..dimF;
 	
 	auto = record
 		patente : integer;
@@ -57,6 +60,8 @@ type
 		HI : arbol2;
 		HD : arbol2;
 	end;
+	
+	vectorAnios = array[anios]of lista;
 	
 procedure generarAuto(var a:auto);
 var
@@ -166,16 +171,123 @@ begin
 	else contarAutosMarca2 := contarAutosMarca2(a^.HI,marca) + contarAutosMarca2(a^.HD,marca);
 end;
 
+//MODULO D
+procedure iniciarVector(var v:vectorAnios);
+var
+	i:anios;
+begin
+	for i:=dim1 to dimF do
+		v[i] := nil;
+end;
+
+procedure cargarVector(a:arbol; var v:vectorAnios);
+begin
+	if(a <> nil)then begin
+		agregarAdelante(v[a^.dat.anioFabricado],a^.dat);
+		cargarVector(a^.HI,v);
+		cargarVector(a^.HD,v);
+	end;
+end;
+
+//MODULO E
+function obtenerModeloPatente(a:arbol; patente:integer):String;
+begin
+	if(a = nil)then obtenerModeloPatente := ''
+	else begin
+		if(a^.dat.patente > patente)then
+			obtenerModeloPatente := obtenerModeloPatente(a^.HI,patente)
+		else if(a^.dat.patente < patente)then
+			obtenerModeloPatente := obtenerModeloPatente(a^.HD,patente)
+		else if(a^.dat.patente = patente)then
+			obtenerModeloPatente := a^.dat.modelo
+		else
+			obtenerModeloPatente := '';
+	end;
+end;
+
+//MODULO F
+function buscarAutoLista(l:lista; pat:integer):String;
+begin
+	while(l <> nil)and(l^.dat.patente <> pat)do
+		l := l^.sig;
+	if(l <> nil)then 
+		buscarAutoLista := l^.dat.modelo
+	else
+		buscarAutoLista := '';
+end;
+
+procedure obtenerModeloPatente2(a:arbol2; pat:integer; var model:String);
+begin
+	if(a <> nil)then begin
+		model := buscarAutoLista(a^.dat,pat);
+		if(model = '')then begin
+			obtenerModeloPatente2(a^.HI,pat,model);
+			obtenerModeloPatente2(a^.HD,pat,model);
+		end;
+	end;
+end;
+
+
+//MODULO OPCIONAL
+procedure imprimirArbol(a:arbol);
+begin
+	if(a <> nil)then begin
+		imprimirArbol(a^.HI);
+		imprimirAuto(a^.dat);
+		imprimirArbol(a^.HD);
+	end;
+end;
+
+procedure imprimirLista(l:lista);
+begin
+	while(l <> nil)do begin
+		imprimirAuto(l^.dat);
+		l := l^.sig;
+	end;
+end;
+
+procedure imprimirArbol2(a:arbol2);
+begin
+	if(a <> nil)then begin
+		imprimirArbol2(a^.HI);
+		imprimirLista(a^.dat);
+		imprimirArbol2(a^.HD);
+	end;
+end;
+
+
 
 VAR
 	a:arbol; a2:arbol2;
 	marcaB : String;
+	v : vectorAnios;
+	pate : integer;
+	model : String; // F
 BEGIN
 	randomize;
 	a:=nil;
 	a2:=nil;
 	generarArboles(a,a2);    			  //A
-	marcaB := 'Toyota';
+	
+	//imprimirArbol(a);
+	imprimirArbol2(a2);
+	
+	marcaB := 'Toyota';	
+	
 	writeln(contarAutosMarca(a,marcaB));  //B
 	writeln(contarAutosMarca2(a2,marcaB));//C
+	iniciarVector(v);
+	cargarVector(a,v);					  //D
+	
+	readln(pate);	//Lectura opcional
+	
+	//writeln(obtenerModeloPatente(a,pate));  //E
+	
+	model := '';							//F
+	obtenerModeloPatente2(a2,pate,model);
+	if(model <> '')then
+		writeln(model)
+	else
+		writeln('No se encotro');
+	
 END.
