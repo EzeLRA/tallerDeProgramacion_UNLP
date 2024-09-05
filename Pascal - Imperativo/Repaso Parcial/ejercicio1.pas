@@ -108,19 +108,59 @@ begin
 	end;
 end;
 
+//MODULO B2 - OPCION EFICIENTE
 
+procedure agregarAdelante(var l:lista; alu:alumno);
+var
+	nuevo : lista;
+begin
+	new(nuevo);
+	nuevo^.dat := alu;
+	nuevo^.sig := l;
+	l := nuevo;
+end;
+
+procedure cargarLista2(a:arbol; var l:lista; rang1,rang2:real);
+begin
+	if(a <> nil)then begin
+		cargarLista2(a^.HI,l,rang1,rang2);
+		if(a^.dat.tiempoRegistrado >= rang1)and(a^.dat.tiempoRegistrado <= rang2)then begin
+			agregarAdelante(l,a^.dat);
+			cargarLista(a^.HI,l,rang1,rang2);
+			cargarLista(a^.HD,l,rang1,rang2);
+		end else if(a^.dat.tiempoRegistrado < rang1)then
+			cargarLista(a^.HD,l,rang1,rang2)
+		else if(a^.dat.tiempoRegistrado > rang2)then
+			cargarLista(a^.HI,l,rang1,rang2);
+	end;
+end;
+
+//MODULO C
+procedure procesarMin(a:arbol; var aluMin:alumno);
+begin
+	if(a <> nil)then begin
+		if(aluMin.tiempoRegistrado > a^.dat.tiempoRegistrado)then
+			aluMin := a^.dat;
+		procesarMin(a^.HI,aluMin);
+		procesarMin(a^.HD,aluMin);
+	end;
+end;
 
 VAR
 	a:arbol;
 	l:lista;
 	rang1,rang2:real;
-
+	aluMin : alumno;
 BEGIN
 	a := nil;
 	cargarArbol(a);	//A
 	
 	l := nil;
 	readln(rang1); readln(rang2);
-	cargarLista(a,l,rang1,rang2);	//B
+	cargarLista2(a,l,rang1,rang2);	//B
 	
+	aluMin.tiempoRegistrado := 9999;
+	procesarMin(a,aluMin);	//C
+	writeln(aluMin.nombre);
+	writeln(aluMin.DNI);
 END.
