@@ -23,6 +23,16 @@ begin
 	end;
 end;
 
+procedure cargarVector2(var v:vector; var dl:integer);
+var
+	i,num:integer;
+begin
+	for i:=1 to dimF do begin
+		num := random(10) + 1;
+		agregarElem(v,dl,num);
+	end;
+end;
+
 procedure ordenarSeleccion(var v:vector; dl:integer);
 var
 	pos,i,j:integer;
@@ -31,7 +41,7 @@ begin
 	for i:=1 to dl-1 do begin
 		pos := i;
 		for j:=i to dl do
-			if(v[j] < v[i])then pos := j;
+			if(v[i] < v[j])then pos := j;
 		aux := v[i];
 		v[i] := v[pos];
 		v[pos] := aux;
@@ -85,14 +95,16 @@ VAR
 	dl:integer;
 	num:integer;
 BEGIN
-
+	randomize;
+	
 	dl:=0;
-	cargarVector(v,dl);
-	ordenarInsercion(v,dl);
+	cargarVector2(v,dl);
+	ordenarSeleccion(v,dl);
 	writeln;
 	imprimirVector(v,dl);
-	writeln;
-	readln(num);
-	writeln(BusquedaBinaria(v,dl,num));
+	
+	//writeln;
+	//readln(num);
+	//writeln(BusquedaBinaria(v,dl,num));
 	
 END.
