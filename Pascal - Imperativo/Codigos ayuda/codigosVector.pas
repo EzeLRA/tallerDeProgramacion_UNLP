@@ -81,6 +81,26 @@ Begin
     BusquedaBinaria := (x = v[medio]);
 End ;
 
+//CORREGIR
+function BusquedaDicotomica(var v:vector; pri,ult,x:integer):boolean;
+Var
+	medio: integer;
+Begin	
+	if(pri <= ult)then begin
+		medio := (pri + ult) div 2;
+		if(x = v[medio])then
+			BusquedaDicotomica := true
+		else begin
+			If (x < v [ medio ]) then
+			BusquedaDicotomica := BusquedaDicotomica(v,pri,medio-1,x)
+        else
+            BusquedaDicotomica := BusquedaDicotomica(v,pri+1,ult,x);
+		end;
+	end  else
+		BusquedaDicotomica := (x = v[medio]);
+End ;
+
+
 
 procedure imprimirVector(v:vector; dl:integer);
 var
@@ -102,9 +122,8 @@ BEGIN
 	ordenarSeleccion(v,dl);
 	writeln;
 	imprimirVector(v,dl);
-	
-	//writeln;
-	//readln(num);
-	//writeln(BusquedaBinaria(v,dl,num));
+	writeln;
+	readln(num);
+	writeln(BusquedaDicotomica(v,1,dl,num));
 	
 END.
