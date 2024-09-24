@@ -22,7 +22,7 @@ public class Ej02Jugadores {
             num = Lector.leerDouble();
             vectorDouble[i] = num;
             sum =+ num;
-        };
+        }
         //Paso 7: Calcular el promedio de alturas, informarlo
         double prom = sum / dimF;
         System.out.println("Promedio: " + prom);
@@ -33,8 +33,8 @@ public class Ej02Jugadores {
             if(prom < vectorDouble[i]){
                 sum2 =+ vectorDouble[i];
                 cant ++;
-            };
-        };
+            }
+        }
         //Paso 9: Informar la cantidad.
         System.out.println("Cantidad que superan: " + cant);
         System.out.println("Promedio: " + sum2);
