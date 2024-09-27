@@ -14,8 +14,10 @@ public class Libro {
    private int añoEdicion;
    private String ISBN; 
    private double precio; 
-     
+   
+   private Autor primerAutor2;
     
+   //Constructores
     public Libro(  String unTitulo,  String unaEditorial, 
     int unAñoEdicion,  String unPrimerAutor, String unISBN, double unPrecio){
          titulo = unTitulo;
@@ -35,10 +37,38 @@ public class Libro {
          precio = 100;
     }
     
+    public Libro(  String unTitulo,  String unaEditorial, 
+    int unAñoEdicion,  Autor unPrimerAutor, String unISBN, double unPrecio){
+         titulo = unTitulo;
+         editorial = unaEditorial; 
+         añoEdicion= unAñoEdicion;
+         primerAutor = unPrimerAutor.getNombre();
+         primerAutor2 = new Autor(unPrimerAutor.getNombre(),unPrimerAutor.getBiografia(),unPrimerAutor.getOrigen());
+         ISBN =  unISBN;
+         precio = unPrecio;
+    }
+    
+    public Libro(  String unTitulo,  String unaEditorial, Autor unPrimerAutor, String unISBN){
+         titulo = unTitulo;
+         editorial = unaEditorial; 
+         añoEdicion= 2015;
+         primerAutor = unPrimerAutor.getNombre();
+         primerAutor2 = new Autor(unPrimerAutor.getNombre(),unPrimerAutor.getBiografia(),unPrimerAutor.getOrigen());
+         ISBN =  unISBN;
+         precio = 100;
+    }
+    
+    
+    
     public Libro(){
    
     }
-        
+    
+    
+    
+    
+    //Getters y Setters
+    
     public String getTitulo(){
         return titulo;
     }
@@ -80,7 +110,18 @@ public class Libro {
     public void setPrecio(double unPrecio){
          precio=unPrecio;
     }
+
+    public Autor getPrimerAutor2() {
+        return primerAutor2;
+    }
+
+    public void setPrimerAutor2(Autor unPrimerAutor) {
+        this.primerAutor2 = new Autor(unPrimerAutor.getNombre(),unPrimerAutor.getBiografia(),unPrimerAutor.getOrigen());
+    }
    
+    
+    
+   //Metodos
     
    @Override
     public String toString(){
