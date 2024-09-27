@@ -3,6 +3,8 @@ Demo que crea objetos Libro invocando a los constructores definidos.
  */
 package tema3;
 
+
+
 /**
  *
  * @author vsanz
@@ -32,8 +34,10 @@ public class Demo01ConstructoresLibro {
                               "CreateSpace Independent Publishing", 
                                unAutor, "978-1512108347");
     
+        //Si se quisiera cambiar el nombre autor se debe hacerlo desde la clase libro y la clase autor
         System.out.println(libro3.toString());
-        System.out.println("Informacion Autor" + libro3.getPrimerAutor2().toString());
+        System.out.println("Informacion Autor " + libro3.getPrimerAutor().toString());
+        
     }
     
 }

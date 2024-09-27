@@ -1,6 +1,6 @@
 /*
 Clase Libro a la cual se agregaron constructores. 
- */
+*/
 package tema3;
 
 /**
@@ -24,6 +24,7 @@ public class Libro {
          editorial = unaEditorial; 
          añoEdicion= unAñoEdicion;
          primerAutor = unPrimerAutor;
+         primerAutor2 = new Autor(unPrimerAutor,"","");
          ISBN =  unISBN;
          precio = unPrecio;
     }
@@ -33,6 +34,7 @@ public class Libro {
          editorial = unaEditorial; 
          añoEdicion= 2015;
          primerAutor = unPrimerAutor;
+         primerAutor2 = new Autor(unPrimerAutor,"","");
          ISBN =  unISBN;
          precio = 100;
     }
@@ -80,7 +82,7 @@ public class Libro {
         return añoEdicion;
     }
   
-    public String getPrimerAutor(){
+    public String getNombreAutor(){
         return primerAutor;
     } 
     public String getISBN(){
@@ -100,10 +102,12 @@ public class Libro {
     public void setAñoEdicion(int unAño){
          añoEdicion = unAño;
     }
-   
-    public void setPrimerAutor(String unPrimerAutor){
-         primerAutor=unPrimerAutor;
+    
+    public void setNombreAutor(String unPrimerAutor){
+        this.primerAutor2.setNombre(unPrimerAutor);
+        primerAutor=unPrimerAutor;
     } 
+    
     public void setISBN(String unISBN){
          ISBN=unISBN;
     } 
@@ -111,14 +115,14 @@ public class Libro {
          precio=unPrecio;
     }
 
-    public Autor getPrimerAutor2() {
+    public Autor getPrimerAutor() {
         return primerAutor2;
     }
 
-    public void setPrimerAutor2(Autor unPrimerAutor) {
+    public void setPrimerAutor(Autor unPrimerAutor) {
         this.primerAutor2 = new Autor(unPrimerAutor.getNombre(),unPrimerAutor.getBiografia(),unPrimerAutor.getOrigen());
     }
-   
+    
     
     
    //Metodos
