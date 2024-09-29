@@ -7,6 +7,8 @@ public class Ejercicio4 {
         GeneradorAleatorio.iniciar();
         int tam = 20;
         Hotel hotel1 = new Hotel(tam);
+        
+        
         hotel1.cargarPrecios(2000, 8000);
         
         

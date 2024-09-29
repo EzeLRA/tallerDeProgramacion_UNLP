@@ -17,6 +17,10 @@ public class Hotel {
     //Metodos
     public void cargarPrecios(int a, int b){   
         double precio;
+        /*
+            CONSULTAR
+        */
+        
         GeneradorAleatorio.iniciar();
         for(int i=0; i< this.habitacionesTotal ; i++){
             precio = (double) b - (GeneradorAleatorio.generarDouble(a)+1);

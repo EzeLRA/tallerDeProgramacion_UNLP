@@ -40,6 +40,11 @@ public class Estante {
     }
     
     public Libro encontrarLibro(String Titulo){
+        /*
+            CONSULTAR SOBRE LDevolver
+        */
+        
+        
         Libro LDevolver ;
         
         boolean encontrado = false;
