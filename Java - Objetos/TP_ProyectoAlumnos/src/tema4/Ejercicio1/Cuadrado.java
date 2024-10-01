@@ -1,4 +1,6 @@
-package tema4;
+package tema4.Ejercicio1;
+
+import tema4.Ejercicio1.Figura;
 
 
 public class Cuadrado extends Figura{

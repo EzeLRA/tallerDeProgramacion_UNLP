@@ -10,7 +10,7 @@ public class Habitacion {
     public Habitacion(){
         this.ocupada = false;
         this.precio = 0;    //Inicializado en 0 para luego modificarlo con el setter
-        this.cliente = null;       //Consultar
+        this.cliente = null;       
     }
     
     public Habitacion(double precioIngresado){
