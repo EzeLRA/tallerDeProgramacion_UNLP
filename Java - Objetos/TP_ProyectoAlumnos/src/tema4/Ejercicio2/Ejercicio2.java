@@ -13,6 +13,14 @@ public class Ejercicio2 {
           GeneradorAleatorio.generarInt(15)
         );
         
+        Entrenador entrenador1 = new Entrenador(
+            GeneradorAleatorio.generarString(3),
+        GeneradorAleatorio.generarDouble(10000),
+         GeneradorAleatorio.generarInt(5),
+        GeneradorAleatorio.generarInt(20)
+        );
+        
+        System.out.println(entrenador1.toString());
         System.out.println(jugador1.toString());
     }
     
