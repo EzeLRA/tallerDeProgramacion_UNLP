@@ -19,7 +19,7 @@ public class Hotel {
         double precio;
         
         for(int i=0; i< this.habitacionesTotal ; i++){
-            precio = a + GeneradorAleatorio.generarDouble(b);
+            precio = a + GeneradorAleatorio.generarDouble(b);   //Es correcto , se puede mejorar. Agregar mejora en clase habitacion
             this.habitaciones[i] = new Habitacion(precio);
         }
     }

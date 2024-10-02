@@ -41,7 +41,8 @@ public class Estante {
     
     public Libro encontrarLibro(String Titulo){
         /*
-            CONSULTAR SOBRE LDevolver
+            La devolucion de una nueva instacia de la clase encontrada es correcto. 
+                Solo depende del proposito
         */
         
         
@@ -64,7 +65,7 @@ public class Estante {
                         libros[i].getPrecio()
             );
         }else{
-            LDevolver = null;
+            LDevolver = null;   //Es correcto
         }
         
         return LDevolver;
