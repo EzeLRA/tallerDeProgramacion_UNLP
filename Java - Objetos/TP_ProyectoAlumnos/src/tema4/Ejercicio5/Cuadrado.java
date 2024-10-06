@@ -1,7 +1,4 @@
-package tema4.Ejercicio1;
-
-import tema4.Ejercicio1.Figura;
-
+package tema4.Ejercicio5;
 
 public class Cuadrado extends Figura{
     
@@ -30,8 +27,7 @@ public class Cuadrado extends Figura{
     }
     
     public String toString(){
-       String aux = super.toString() + 
-                    " Lado: " + getLado();
+       String aux ="Cuadrado de Lado: " + getLado() + " y " + super.toString();
        return aux;
     }
 
