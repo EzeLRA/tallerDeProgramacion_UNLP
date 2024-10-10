@@ -9,6 +9,11 @@ public class Director extends Persona{
         super(nombre, DNI, edad);
         this.antiguedadAnios = antiguedadAnios;
     }
+
+    @Override
+    public String toString() {
+        return "Director{" + super.toString() + "antiguedadAnios=" + antiguedadAnios + '}';
+    }
     
     
     

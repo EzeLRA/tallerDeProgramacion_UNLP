@@ -12,5 +12,10 @@ public abstract class Persona {
         this.DNI = DNI;
         this.edad = edad;
     }
+
+    @Override
+    public String toString() {
+        return "nombre=" + nombre + ", DNI=" + DNI + ", edad=" + edad;
+    }
     
 }

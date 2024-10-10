@@ -9,6 +9,16 @@ public class Corista extends Persona {
         super(nombre, DNI, edad);
         this.tonoFundamental = tonoFundamental;
     }
+
+    public int getTonoFundamental() {
+        return tonoFundamental;
+    }
+
+    @Override
+    public String toString() {
+        return "Corista{" + super.toString() + "tonoFundamental=" + tonoFundamental + '}';
+    }
+    
     
     
 }
