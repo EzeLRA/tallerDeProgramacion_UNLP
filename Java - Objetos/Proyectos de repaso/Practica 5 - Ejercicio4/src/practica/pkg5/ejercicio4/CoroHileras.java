@@ -13,8 +13,9 @@ public class CoroHileras extends Coro{
         super(nombre, directorCoro);
         this.hilerasMax = hilerasMax;
         this.filaMax = filaMax;
+        this.filasCantCoristas = new int[hilerasMax];
         
-        for(int i=0; i<filaMax ; i++){
+        for(int i=0; i<hilerasMax ; i++){
             this.filasCantCoristas[i] = 0;
         }
         
@@ -37,7 +38,7 @@ public class CoroHileras extends Coro{
     public boolean isCoroLleno(){
         int coristasTotalMax = this.hilerasMax * this.filaMax;
         int cantCoristas = 0;
-        for(int i=0; i<this.filaMax ; i++){
+        for(int i=0; i<this.hilerasMax ; i++){
             cantCoristas += this.filasCantCoristas[i];
         }
         return (cantCoristas == coristasTotalMax);
