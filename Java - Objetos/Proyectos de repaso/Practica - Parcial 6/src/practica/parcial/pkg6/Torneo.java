@@ -34,6 +34,7 @@ public class Torneo {
         int total = 0;
         for(int i=0;i<this.fechasCant;i++){
             total += this.fechas[i].getGoleadoresCant();
+            
         }
         return total;
     }

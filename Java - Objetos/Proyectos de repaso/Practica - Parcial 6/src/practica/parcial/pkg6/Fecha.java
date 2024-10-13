@@ -39,12 +39,12 @@ public class Fecha {
     }
 
     public int getGoleadoresCant() {
-        return goleadoresCant;
+        return this.goleadoresCant;
     }
 
     @Override
     public String toString() {
-        String cad = "Cantidad de goleadores:" + goleadoresCant + " ; ";
+        String cad = "Cantidad de goleadores:" + this.goleadoresCant + " ; ";
         for(int i=0;i<this.goleadoresCant ;i++){
             cad += this.goleadores[i].toString();
         }

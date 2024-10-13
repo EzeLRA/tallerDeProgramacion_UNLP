@@ -8,7 +8,7 @@ public class PracticaParcial6 {
         Torneo t = new Torneo("asdf",3,5);
         Goleador g;
         for(int i=0;i<5;i++){
-            g = new Goleador("asd","fdf",GeneradorAleatorio.generarInt(10));
+            g = new Goleador(GeneradorAleatorio.generarString(3),"fdf",GeneradorAleatorio.generarInt(10));
             t.agregarGoleadorFecha(1, g);
         }
         Goleador gMin = t.retornarGoleadorMinFechaX(1);
