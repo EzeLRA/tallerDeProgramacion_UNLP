@@ -1,0 +1,55 @@
+{Modificar el programa para que se haga el trabajo con 3 robots. De modo que el programa sea similar al Ej1a pero en el que esas avenidas se encuentren esos robots para las avenidas (1,3,5) y la calle 1}
+{Aclaracion: trabajo hecho con robots del mismo tipo}
+programa ejercicio1b2
+procesos
+  proceso contarEsquinaSinFlor(ES cant:numero)
+  comenzar
+    si (~HayFlorEnLaEsquina)
+      cant := cant + 1
+  fin
+  proceso contabilizarFloresDepositadas(ES cant:numero)
+  comenzar
+    mientras HayFlorEnLaBolsa
+      depositarFlor
+      cant := cant + 1
+  fin
+  proceso recolectarFlores
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+  fin
+  proceso recorrerProcesarAv(ES cant:numero)
+  comenzar
+    Pos(PosAv,1)
+    repetir 99
+      contarEsquinaSinFlor(cant)
+      recolectarFlores
+      mover
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    floresDepositadas:numero
+    esquinaSinFlores:numero
+  comenzar
+    floresDepositadas := 0
+    esquinaSinFlores:=0
+    recorrerProcesarAv(esquinaSinFlores)
+    contabilizarFloresDepositadas(floresDepositadas)
+    Informar(floresDepositadas)
+    Informar(esquinaSinFlores)
+  fin
+variables
+  RoboAv1: robot1
+  RoboAv2: robot1
+  RoboAv3: robot1
+comenzar
+  AsignarArea(RoboAv1, ciudad)
+  AsignarArea(RoboAv2, ciudad)
+  AsignarArea(RoboAv3, ciudad)
+  Iniciar(RoboAv1,1,1)
+  Iniciar(RoboAv2,3,1)
+  Iniciar(RoboAv3,5,1)
+fin

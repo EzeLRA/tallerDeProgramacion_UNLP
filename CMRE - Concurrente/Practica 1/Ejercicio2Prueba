@@ -1,0 +1,54 @@
+{Ejercicio hecho con distintos robots}
+programa ejercicio2
+procesos
+  proceso recorrerCuadrado(E tam:numero)
+  comenzar
+    repetir 4
+      repetir tam
+        mover
+      derecha
+  fin
+areas
+  ciudad: AreaC (9,9,31,31)
+robots
+  {robot 1}
+  robot robot1
+  comenzar
+    recorrerCuadrado(20)
+  fin
+  {robot 2}
+  robot robot2
+  comenzar
+    derecha
+    recorrerCuadrado(20)
+  fin
+  {robot 3}
+  robot robot3
+  comenzar
+    derecha
+    derecha
+    recorrerCuadrado(20)
+  fin
+  {robot 4}
+  robot robot4
+  comenzar
+    derecha
+    derecha
+    derecha
+    recorrerCuadrado(20)
+  fin
+variables
+  RobotV1: robot1
+  RobotV2: robot2
+  RobotV3: robot3
+  RobotV4: robot4
+comenzar
+  AsignarArea(RobotV1,ciudad)
+  AsignarArea(RobotV2,ciudad)
+  AsignarArea(RobotV3,ciudad)
+  AsignarArea(RobotV4,ciudad)
+  Iniciar(RobotV1, 10,10)
+  Iniciar(RobotV2,10,30)
+  Iniciar(RobotV3,30,30)
+  Iniciar(RobotV4,30,10)
+fin

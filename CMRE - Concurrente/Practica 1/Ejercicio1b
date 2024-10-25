@@ -1,0 +1,80 @@
+{Modificar el programa para que se haga el trabajo con 3 robots. De modo que el programa sea similar al Ej1a pero en el que esas avenidas se encuentren esos robots para las avenidas (1,3,5) y la calle 1}
+{Aclaracion: trabajo hecho con distintos robots}
+programa ejercicio1b
+procesos
+  proceso contarEsquinaSinFlor(ES cant:numero)
+  comenzar
+    si (~HayFlorEnLaEsquina)
+      cant := cant + 1
+  fin
+  proceso contabilizarFloresDepositadas(ES cant:numero)
+  comenzar
+    mientras HayFlorEnLaBolsa
+      depositarFlor
+      cant := cant + 1
+  fin
+  proceso recolectarFlores
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+  fin
+  proceso recorrerProcesarAv(E numAv: numero;ES cant:numero)
+  comenzar
+    Pos(numAv, 1)
+    repetir 99
+      contarEsquinaSinFlor(cant)
+      recolectarFlores
+      mover
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    floresDepositadas:numero
+    esquinaSinFlores:numero
+  comenzar
+    floresDepositadas := 0
+    esquinaSinFlores:=0
+    recorrerProcesarAv(1,esquinaSinFlores)
+    contabilizarFloresDepositadas(floresDepositadas)
+    Informar(floresDepositadas)
+    Informar(esquinaSinFlores)
+  fin
+  robot robot2
+  variables
+    floresDepositadas:numero
+    esquinasSinFlores:numero
+  comenzar
+    floresDepositadas := 0
+    esquinasSinFlores := 0
+    recorrerProcesarAv(3,esquinasSinFlores)
+    contabilizarFloresDepositadas(floresDepositadas)
+    Informar(floresDepositadas)
+    Informar(esquinasSinFlores)
+  fin
+  robot robot3
+  variables
+    floresDepositadas : numero
+    esquinasSinFlores : numero
+  comenzar
+    floresDepositadas := 0
+    esquinasSinFlores := 0
+    recorrerProcesarAv(5,esquinasSinFlores)
+    contabilizarFloresDepositadas(floresDepositadas)
+    Informar(floresDepositadas)
+    Informar(esquinasSinFlores)
+  fin
+
+variables
+  RoboAv1: robot1
+  RoboAv2: robot2
+  RoboAv3: robot3
+comenzar
+  AsignarArea(RoboAv1, ciudad)
+  AsignarArea(RoboAv2, ciudad)
+  AsignarArea(RoboAv3, ciudad)
+  Iniciar(RoboAv1,1,1)
+  Iniciar(RoboAv2,3,1)
+  Iniciar(RoboAv3,5,1)
+fin
