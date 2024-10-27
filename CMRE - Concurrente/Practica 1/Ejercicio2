@@ -1,0 +1,77 @@
+{Ejercicio hecho con distintos robots}
+programa ejercicio2
+procesos
+  proceso juntarPapelesYcontar(ES cant:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cant := cant + 1
+  fin
+  proceso recorrerLadoProcesar(E tam:numero; ES cantPapeles:numero)
+  comenzar
+    repetir tam
+      juntarPapelesYcontar(cantPapeles)
+      mover
+  fin
+areas
+  lado1: AreaP (10,10,10,29)
+  lado2: AreaP (10,30,29,30)
+  lado3: AreaP (30,11,30,30)
+  lado4: AreaP (11,10,30,10)
+robots
+  {robot 1}
+  robot robot1
+  variables
+    cantTotal : numero
+  comenzar
+    cantTotal := 0
+    recorrerLadoProcesar(19,cantTotal)
+    Informar(cantTotal)
+  fin
+  {robot 2}
+  robot robot2
+  variables
+    cantTotal : numero
+  comenzar
+    cantTotal := 0
+    derecha
+    recorrerLadoProcesar(19,cantTotal)
+    Informar(cantTotal)
+  fin
+  {robot 3}
+  robot robot3
+  variables
+    cantTotal : numero
+  comenzar
+    cantTotal := 0
+    repetir 2
+      derecha
+    recorrerLadoProcesar(19,cantTotal)
+    Informar(cantTotal)
+  fin
+  {robot 4}
+  robot robot4
+  variables
+    cantTotal : numero
+  comenzar
+    cantTotal := 0
+    repetir 3
+      derecha
+    recorrerLadoProcesar(19,cantTotal)
+    Informar(cantTotal)
+  fin
+variables
+  RobotV1: robot1
+  RobotV2: robot2
+  RobotV3: robot3
+  RobotV4: robot4
+comenzar
+  AsignarArea(RobotV1,lado1)
+  AsignarArea(RobotV2,lado2)
+  AsignarArea(RobotV3,lado3)
+  AsignarArea(RobotV4,lado4)
+  Iniciar(RobotV1, 10,10)
+  Iniciar(RobotV2,10,30)
+  Iniciar(RobotV3,30,30)
+  Iniciar(RobotV4,30,10)
+fin

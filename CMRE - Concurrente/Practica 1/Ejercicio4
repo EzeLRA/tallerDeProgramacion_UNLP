@@ -1,0 +1,73 @@
+programa ejercicio4
+procesos
+  proceso recolectarFlores
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+  fin
+  proceso recolectarPapeles
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+  fin
+  proceso limpiarAreaFlores
+  comenzar
+    repetir 24
+      repetir 99
+        recolectarFlores
+        mover
+      Pos(PosAv + 1, 1)
+    repetir 99
+      recolectarFlores
+      mover
+  fin
+  proceso limpiarAreaPapeles
+  comenzar
+    repetir 24
+      repetir 99
+        recolectarPapeles
+        mover
+      Pos(PosAv + 1, 1)
+    repetir 99
+      recolectarPapeles
+      mover
+  fin
+  proceso limpiarAreasPar
+  comenzar
+    {Pos(26,1)}
+    limpiarAreaPapeles
+    Pos(76,1)
+    limpiarAreaPapeles
+  fin
+  proceso limpiarAreasImpar
+  comenzar
+    {Pos(1,1)}
+    limpiarAreaFlores
+    Pos(51,1)
+    limpiarAreaFlores
+  fin
+areas
+  areaImpar1: AreaP (1,1,25,100)
+  areaPar2: AreaP(26,1,50,100)
+  areaImpar3: AreaP(51,1,75,100)
+  areaPar4: AreaP(76,1,100,100)
+robots
+  robot robot1
+  comenzar
+    limpiarAreasImpar
+  fin
+  robot robot2
+  comenzar
+    limpiarAreasPar
+  fin
+variables
+  robotPar: robot2
+  robotImpar: robot1
+comenzar
+  AsignarArea(robotImpar, areaImpar1)
+  AsignarArea(robotPar, areaPar2)
+  AsignarArea(robotImpar, areaImpar3)
+  AsignarArea(robotPar, areaPar4)
+  Iniciar(robotImpar, 1,1)
+  Iniciar(robotPar,26,1)
+fin
