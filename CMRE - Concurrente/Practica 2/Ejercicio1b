@@ -1,0 +1,60 @@
+programa ejercicio1b
+procesos
+  proceso contar_JuntarFlores(ES cant:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant := cant + 1
+  fin
+  proceso recorrerAvenida(ES flores:numero)
+  comenzar
+    repetir 9
+      contar_JuntarFlores(flores)
+      mover
+    contar_JuntarFlores(flores)
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    cant : numero
+  comenzar
+    cant := 0
+    recorrerAvenida(cant)
+    EnviarMensaje(cant,robi3)
+  fin
+  robot robot2
+  variables
+    cant : numero
+  comenzar
+    cant := 0
+    recorrerAvenida(cant)
+    EnviarMensaje(cant,robi3)
+  fin
+  robot robot3
+  variables
+    diferencia : numero
+    primero : numero
+    segundo : numero
+  comenzar
+    RecibirMensaje(primero,*)
+    RecibirMensaje(segundo,*)
+    si primero > segundo
+      diferencia := primero - segundo
+    sino
+      diferencia := segundo - primero
+    Informar(diferencia)
+  fin
+variables
+  robi1: robot1
+  robi2: robot2
+  robi3: robot3
+comenzar
+  AsignarArea(robi1, ciudad)
+  AsignarArea(robi2, ciudad)
+  AsignarArea(robi3, ciudad)
+  Iniciar(robi1, 1,1)
+  Iniciar(robi2, 2,11)
+  Iniciar(robi3, 2,1)
+fin
