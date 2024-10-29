@@ -1,0 +1,85 @@
+programa ejercicio2
+procesos
+  proceso contabilizar_Papeles(ES papeles:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles := papeles + 1
+  fin
+  proceso contabilizar_Flores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores := flores + 1
+  fin
+  proceso contabilizarTodo(ES flores:numero;ES papeles:numero)
+  comenzar
+    contabilizar_Flores(flores)
+    contabilizar_Papeles(papeles)
+  fin
+  proceso apuntarArriba
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso hacerEscalon_Procesar(ES cant:numero)
+  variables
+    tam : numero
+    flores : numero
+    papeles : numero
+  comenzar
+    flores := 0
+    papeles := 0
+    Random(tam,1,5)
+    repetir tam
+      contabilizarTodo(flores,papeles)
+      mover
+    derecha
+    mover
+    contabilizarTodo(flores,papeles)
+    si(flores > papeles)
+      cant := cant + 1
+  fin
+  proceso hacerEscalera(ES cant:numero)
+  comenzar
+    repetir 4
+      hacerEscalon_Procesar(cant)
+      apuntarArriba
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    cant : numero
+  comenzar
+    cant := 0
+    hacerEscalera(cant)
+    EnviarMensaje(cant,robotInformador)
+  fin
+  robot robotJefe
+  variables
+    suma : numero
+    aux : numero
+  comenzar
+    suma := 0
+    repetir 3
+      RecibirMensaje(aux,*)
+      suma := suma + aux 
+    Informar(suma)
+  fin
+variables
+  robi1: robot1
+  robi2: robot1
+  robi3: robot1
+  robotInformador : robotJefe
+comenzar
+  AsignarArea(robi1, ciudad)
+  AsignarArea(robi2, ciudad)
+  AsignarArea(robi3, ciudad)
+  AsignarArea(robotInformador, ciudad)
+  Iniciar(robotInformador,1,1)
+  Iniciar(robi1, 2,1)
+  Iniciar(robi2, 7,1)
+  Iniciar(robi3, 12,1)
+fin
