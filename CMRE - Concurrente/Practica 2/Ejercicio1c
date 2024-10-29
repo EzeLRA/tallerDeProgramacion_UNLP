@@ -1,0 +1,73 @@
+programa ejercicio1c
+procesos
+  proceso contar_JuntarFlores(ES cant:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant := cant + 1
+  fin
+  proceso recorrerAvenida(ES flores:numero)
+  comenzar
+    repetir 9
+      contar_JuntarFlores(flores)
+      mover
+    contar_JuntarFlores(flores)
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    cant : numero
+  comenzar
+    cant := 0
+    recorrerAvenida(cant)
+    EnviarMensaje(cant,robiFiscal)
+  fin
+  robot robotFisc
+  variables
+    aux : numero
+    ganador : numero
+    posAct : numero
+    ganadorPos : numero
+  comenzar
+    ganador := -1
+    posAct := 0
+    ganadorPos := 0{Corregir}
+    repetir 6
+      RecibirMensaje(aux,*)
+      posAct := posAct + 1
+      si (aux > ganador)
+        ganador := aux
+        ganadorPos := posAct
+    Informar(ganador)
+    Informar(ganadorPos)
+  fin
+variables
+  {Corredores}
+  robi1: robot1
+  robi2: robot1
+  robi3: robot1
+  robi4: robot1
+  robi5: robot1
+  robi6: robot1
+  {Fiscal}
+  robiFiscal: robotFisc
+comenzar
+  AsignarArea(robi1, ciudad)
+  AsignarArea(robi2, ciudad)
+  AsignarArea(robi3, ciudad)
+  AsignarArea(robi4, ciudad)
+  AsignarArea(robi5, ciudad)
+  AsignarArea(robi6, ciudad)
+  AsignarArea(robiFiscal, ciudad)
+  {Corredores}
+  Iniciar(robi1, 1,1)
+  Iniciar(robi2, 2,11)
+  Iniciar(robi3, 3,21)
+  Iniciar(robi4, 4,31)
+  Iniciar(robi5, 5,41)
+  Iniciar(robi6, 6,51)
+  {Fiscal}
+  Iniciar(robiFiscal, 2,1)
+fin

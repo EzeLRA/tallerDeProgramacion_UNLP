@@ -48,7 +48,7 @@ robots
   fin
 variables
   robi1: robot1
-  robi2: robot2
+  robi2: robot1
   robi3: robot3
 comenzar
   AsignarArea(robi1, ciudad)

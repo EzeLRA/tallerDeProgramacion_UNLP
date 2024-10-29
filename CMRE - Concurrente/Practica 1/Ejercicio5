@@ -1,38 +1,48 @@
+{Consideracion al trabajar con R-Info}
+{Todo lo aplicado en el curso de ingreso es considerado para concurrencia}
 programa ejercicio5
 procesos
-  proceso recolectarFlores
+  proceso recolectarFlores(ES cant:numero)
   comenzar
     mientras HayFlorEnLaEsquina
       tomarFlor
+      cant := cant + 1
   fin
-  proceso depositarFlores
+  proceso depositarFlores(E cant:numero)
   comenzar
-    mientras HayFlorEnLaBolsa
+    repetir cant
       depositarFlor
   fin
   proceso desplazarseProcesarF_Hasta(E cant:numero)
+  variables
+    cantF : numero
   comenzar
+    cantF := 0
     repetir cant
-      recolectarFlores
+      recolectarFlores(cantF)
       mover
-    depositarFlores
+    depositarFlores(cantF)
   fin
-  proceso recolectarPapeles
+  proceso recolectarPapeles(ES cant:numero)
   comenzar
     mientras HayPapelEnLaEsquina
       tomarPapel
+      cant := cant + 1
   fin
-  proceso depositarPapeles
+  proceso depositarPapeles(E cant:numero)
   comenzar
-    mientras HayPapelEnLaBolsa
+    repetir cant
       depositarPapel
   fin
   proceso desplazarseProcesarP_hasta(E cant:numero)
+  variables
+    cantP : numero
   comenzar
+    cantP := 0
     repetir cant
-      recolectarPapeles
+      recolectarPapeles(cantP)
       mover
-    depositarPapeles
+    depositarPapeles(cantP)
   fin
 areas
   ciudad: AreaC (1,1,100,100)

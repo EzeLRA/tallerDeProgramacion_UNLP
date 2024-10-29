@@ -10,27 +10,31 @@ procesos
     mientras HayPapelEnLaEsquina
       tomarPapel
   fin
+  proceso limpiarAvenidaFlores
+  comenzar
+    repetir 99
+      recolectarFlores
+      mover
+  fin
   proceso limpiarAreaFlores
   comenzar
     repetir 24
-      repetir 99
-        recolectarFlores
-        mover
+      limpiarAvenidaFlores
       Pos(PosAv + 1, 1)
+    limpiarAvenidaFlores
+  fin
+  proceso limpiarAvenidaPapeles
+  comenzar
     repetir 99
-      recolectarFlores
+      recolectarPapeles
       mover
   fin
   proceso limpiarAreaPapeles
   comenzar
     repetir 24
-      repetir 99
-        recolectarPapeles
-        mover
+      limpiarAvenidaPapeles
       Pos(PosAv + 1, 1)
-    repetir 99
-      recolectarPapeles
-      mover
+    limpiarAvenidaPapeles
   fin
   proceso limpiarAreasPar
   comenzar
