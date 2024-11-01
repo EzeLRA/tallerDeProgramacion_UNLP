@@ -1,0 +1,32 @@
+programa ejercicio3
+procesos
+  proceso juntar_ContarPapeles(ES papeles:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles := papeles + 1
+  fin
+  proceso recorrer_ProcesarPapelesHasta(E num: numero; ES papeles:numero)
+  comenzar
+    repetir num
+      juntar_ContarPapeles(papeles)
+      mover
+    juntar_ContarPapeles(papeles)
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robotPapeles1
+  variables
+    papeles : numero
+  comenzar
+    papeles := 0
+    derecha
+    recorrer_ProcesarPapelesHasta(9,papeles)
+  fin
+variables
+  A1: robotPapeles1
+comenzar
+  AsignarArea(A1, ciudad)
+  Iniciar(A1, 1,1)
+fin

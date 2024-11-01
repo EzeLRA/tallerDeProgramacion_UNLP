@@ -22,16 +22,14 @@ procesos
     repetir 3
       derecha
   fin
-  proceso hacerEscalon_Procesar(ES cant:numero)
+  proceso hacerEscalon_Procesar(ES cant:numero; E altura:numero)
   variables
-    tam : numero
     flores : numero
     papeles : numero
   comenzar
     flores := 0
     papeles := 0
-    Random(tam,1,5)
-    repetir tam
+    repetir altura
       contabilizarTodo(flores,papeles)
       mover
     derecha
@@ -40,21 +38,24 @@ procesos
     si(flores > papeles)
       cant := cant + 1
   fin
-  proceso hacerEscalera(ES cant:numero)
+  proceso hacerEscalera(ES cant:numero; E escalonesCant:numero)
+  variables
+    altura : numero
   comenzar
-    repetir 4
-      hacerEscalon_Procesar(cant)
+    repetir escalonesCant
+      Random(altura,1,5)
+      hacerEscalon_Procesar(cant,altura)
       apuntarArriba
   fin
 areas
-  ciudad: AreaC (1,1,100,100)
+  ciudad: AreaC (1,1,20,20)
 robots
   robot robot1
   variables
     cant : numero
   comenzar
     cant := 0
-    hacerEscalera(cant)
+    hacerEscalera(cant , 4)
     EnviarMensaje(cant,robotInformador)
   fin
   robot robotJefe

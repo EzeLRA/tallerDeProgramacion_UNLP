@@ -18,30 +18,59 @@ areas
 robots
   robot robot1
   variables
+    numRobot : numero
     cant : numero
   comenzar
+    RecibirMensaje(numRobot,robiFiscal)
     cant := 0
     recorrerAvenida(cant)
+    EnviarMensaje(numRobot,robiFiscal)
     EnviarMensaje(cant,robiFiscal)
   fin
   robot robotFisc
   variables
     aux : numero
-    ganador : numero
-    posAct : numero
-    ganadorPos : numero
+    ganadorCant : numero
+    pos : numero
+    ganadorNum : numero
   comenzar
-    ganador := -1
-    posAct := 0
-    ganadorPos := 0{Corregir}
+    {Asignacion de robots y sus numeros}
+    EnviarMensaje(1,robi1)
+    EnviarMensaje(2,robi2)
+    EnviarMensaje(3,robi3)
+    EnviarMensaje(4,robi4)
+    EnviarMensaje(5,robi5)
+    EnviarMensaje(6,robi6)
+    {codigo del robot fiscal}
+    ganadorCant := -1
+    ganadorNum := 0
     repetir 6
-      RecibirMensaje(aux,*)
-      posAct := posAct + 1
-      si (aux > ganador)
-        ganador := aux
-        ganadorPos := posAct
-    Informar(ganador)
-    Informar(ganadorPos)
+      {Recepecion de mensajes}
+      RecibirMensaje(pos,*)
+      si (pos = 1)
+        RecibirMensaje(aux,robi1)
+      sino 
+        si(pos = 2)
+          RecibirMensaje(aux,robi2)
+        sino
+          si(pos = 3)
+            RecibirMensaje(aux,robi3)
+          sino
+            si(pos = 4)
+              RecibirMensaje(aux,robi4)
+            sino
+              si(pos = 5)
+                RecibirMensaje(aux,robi5)
+              sino
+                si(pos = 6)
+                  RecibirMensaje(aux,robi6)
+      {Proceso de maximo}
+      si (aux > ganadorCant)
+        ganadorCant := aux
+        ganadorNum := pos
+    {Informar ganador y sus datos}
+    Informar(ganadorCant)
+    Informar(ganadorNum)
   fin
 variables
   {Corredores}
