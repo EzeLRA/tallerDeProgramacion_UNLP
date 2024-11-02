@@ -27,14 +27,21 @@ procesos
     juntar_ContarFlores(flores)
   fin
 areas
-  ciudad: AreaC (1,1,100,100)
+  calle1: AreaPC (1,1,40,1)
+  calle5: AreaPC (1,5,40,5)
 robots
   robot robotPapeles1
   variables
     papeles : numero
   comenzar
+    {Primer recorrido}
     papeles := 0
     derecha
+    recorrer_ProcesarPapelesHasta(9,papeles)
+    EnviarMensaje(papeles,A2)
+    {Segundo recorrido}
+    RecibirMensaje(papeles,A2)
+    Pos(PosAv+11,PosCa)
     recorrer_ProcesarPapelesHasta(9,papeles)
     EnviarMensaje(papeles,A2)
   fin
@@ -42,8 +49,15 @@ robots
   variables
     papeles : numero
   comenzar
+    {Primer recorrido}
     RecibirMensaje(papeles,A1)
     derecha
+    recorrer_ProcesarPapelesHasta(9,papeles)
+    Informar(papeles)
+    {Segundo recorrido}
+    EnviarMensaje(papeles,A1)
+    RecibirMensaje(papeles,A1)
+    Pos(PosAv+11,PosCa)
     recorrer_ProcesarPapelesHasta(9,papeles)
     Informar(papeles)
   fin
@@ -51,8 +65,14 @@ robots
   variables
     flores : numero
   comenzar
+    {Primer recorrido}
     flores := 0
     derecha
+    recorrer_ProcesarFloresHasta(9,flores)
+    EnviarMensaje(flores,B2)
+    {Segundo recorrido}
+    RecibirMensaje(flores,B2)
+    Pos(PosAv+11,PosCa)
     recorrer_ProcesarFloresHasta(9,flores)
     EnviarMensaje(flores,B2)
   fin
@@ -60,8 +80,15 @@ robots
   variables
     flores : numero
   comenzar
+    {Primer recorrido}
     RecibirMensaje(flores,B1)
     derecha
+    recorrer_ProcesarFloresHasta(9,flores)
+    Informar(flores)
+    {Segundo recorrido}
+    EnviarMensaje(flores,B1)
+    RecibirMensaje(flores,B1)
+    Pos(PosAv+11,PosCa)
     recorrer_ProcesarFloresHasta(9,flores)
     Informar(flores)
   fin
@@ -71,10 +98,10 @@ variables
   B1: robotFlores1
   B2: robotFlores2
 comenzar
-  AsignarArea(A1, ciudad)
-  AsignarArea(A2, ciudad)
-  AsignarArea(B1, ciudad)
-  AsignarArea(B2, ciudad)
+  AsignarArea(A1, calle1)
+  AsignarArea(A2, calle1)
+  AsignarArea(B1, calle5)
+  AsignarArea(B2, calle5)
   Iniciar(A1, 1,1)
   Iniciar(A2, 11,1)
   Iniciar(B1, 1,5)

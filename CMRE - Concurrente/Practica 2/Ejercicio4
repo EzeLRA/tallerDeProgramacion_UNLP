@@ -1,0 +1,145 @@
+programa ejercicio4
+procesos
+  proceso recolectarPapeles(ES papeles:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles := papeles + 1
+  fin
+  proceso recolectarFlores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores := flores + 1
+  fin
+  proceso recolectarObjetos(ES cant:numero)
+  comenzar
+    si(HayFlorEnLaEsquina | HayPapelEnLaEsquina)
+      recolectarFlores(cant)
+      recolectarPapeles(cant)
+  fin
+  proceso teletransporteAreaRango(E x:numero; E y:numero)
+  variables
+    posX:numero
+    posY:numero
+  comenzar
+    Random(posX,x,y)
+    Random(posY,x,y)
+    Pos(posX,posY)
+  fin
+  proceso filtrarMensaje(E pos:numero; ES salida:numero)
+  comenzar
+    si(pos = 1)
+      RecibirMensaje(salida,recolector1)
+    sino
+      si(pos = 2)
+        RecibirMensaje(salida,recolector2)
+      sino
+        si(pos = 3)
+          RecibirMensaje(salida,recolector3)
+        sino
+          RecibirMensaje(salida,recolector4)
+  fin
+  proceso confirmarRobotAleatorio(E a:numero; E b:numero)
+  variables
+    pos : numero
+  comenzar
+    Random(pos,a,b)
+    si(pos = 1)
+      EnviarMensaje(V,recolector1)
+    sino
+      si(pos = 2)
+        EnviarMensaje(V,recolector2)
+      sino
+        si(pos = 3)
+          EnviarMensaje(V,recolector3)
+        sino
+          EnviarMensaje(V,recolector4)
+  fin
+  proceso procesarMaximo(ES max:numero;ES maxPos:numero;E cant:numero;E pos:numero)
+  comenzar
+    si(max < cant)
+      max := cant
+      maxPos := pos
+  fin
+areas
+  plano: AreaPC (25,25,75,75)
+  puesto1: AreaP (25,1,25,1)
+  puesto2: AreaP (30,1,30,1)
+  puesto3: AreaP (35,1,35,1)
+  puesto4: AreaP (40,1,40,1)
+  puestoF: AreaP (1,1,1,1)
+robots
+  robot robot1
+  variables
+    cant : numero
+    posicion : numero
+    avanzar : boolean
+    avIni : numero
+    caIni : numero
+  comenzar
+    {Inicializacion}
+    cant := 0
+    avIni := PosAv
+    caIni := PosCa
+    RecibirMensaje(posicion,fiscal)
+    RecibirMensaje(avanzar,fiscal)
+    {Ejecucion}
+    mientras(avanzar = V)
+      teletransporteAreaRango(25,75)
+      recolectarObjetos(cant)
+      Pos(avIni,caIni)
+      EnviarMensaje(posicion,fiscal)
+      EnviarMensaje(cant,fiscal)
+      RecibirMensaje(avanzar,fiscal)
+  fin
+  robot robotF
+  variables
+    maxCant : numero
+    cantAux : numero
+    posMax : numero
+    pos : numero
+  comenzar
+    maxCant := -1
+    {Iniciar robot1}
+    EnviarMensaje(1,recolector1)  {Numero robot}
+    EnviarMensaje(2,recolector2)
+    EnviarMensaje(3,recolector3)
+    EnviarMensaje(4,recolector4)
+    {Actividad}
+    repetir 10
+      confirmarRobotAleatorio(1,4)
+      RecibirMensaje(pos,*)
+      filtrarMensaje(pos,cantAux)
+      procesarMaximo(maxCant,posMax,cantAux,pos)
+    {Finalizacion}
+    EnviarMensaje(F,recolector1)
+    EnviarMensaje(F,recolector2)
+    EnviarMensaje(F,recolector3)
+    EnviarMensaje(F,recolector4)
+    {Informe de datos}
+    Informar(posMax)  {Numero}
+    Informar(maxCant) {Cantidad}
+  fin
+variables
+  recolector1: robot1
+  recolector2: robot1
+  recolector3: robot1
+  recolector4: robot1
+  fiscal: robotF
+comenzar
+  AsignarArea(recolector1, plano)
+  AsignarArea(recolector2, plano)
+  AsignarArea(recolector3, plano)
+  AsignarArea(recolector4, plano)
+  AsignarArea(recolector1, puesto1)
+  AsignarArea(recolector2, puesto2)
+  AsignarArea(recolector3, puesto3)
+  AsignarArea(recolector4, puesto4)
+  AsignarArea(fiscal,puestoF)
+  Iniciar(fiscal,1,1)
+  Iniciar(recolector1, 25,1)
+  Iniciar(recolector2, 30,1)
+  Iniciar(recolector3, 35,1)
+  Iniciar(recolector4, 40,1)
+fin
