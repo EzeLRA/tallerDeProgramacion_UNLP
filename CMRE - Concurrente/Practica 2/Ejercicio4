@@ -40,11 +40,8 @@ procesos
         sino
           RecibirMensaje(salida,recolector4)
   fin
-  proceso confirmarRobotAleatorio(E a:numero; E b:numero)
-  variables
-    pos : numero
+  proceso confirmarRobot(E pos:numero)
   comenzar
-    Random(pos,a,b)
     si(pos = 1)
       EnviarMensaje(V,recolector1)
     sino
@@ -55,6 +52,27 @@ procesos
           EnviarMensaje(V,recolector3)
         sino
           EnviarMensaje(V,recolector4)
+  fin
+  proceso cancelarRobotRestantes(E pos:numero)
+  comenzar
+    si(pos=1)
+      EnviarMensaje(F,recolector2)
+      EnviarMensaje(F,recolector3)
+      EnviarMensaje(F,recolector4)
+    sino
+      si(pos = 2)
+        EnviarMensaje(F,recolector1)
+        EnviarMensaje(F,recolector3)
+        EnviarMensaje(F,recolector4)
+      sino
+        si(pos = 3)
+          EnviarMensaje(F,recolector1)
+          EnviarMensaje(F,recolector2)
+          EnviarMensaje(F,recolector4)
+        sino
+          EnviarMensaje(F,recolector1)
+          EnviarMensaje(F,recolector2)
+          EnviarMensaje(F,recolector3)
   fin
   proceso procesarMaximo(ES max:numero;ES maxPos:numero;E cant:numero;E pos:numero)
   comenzar
@@ -92,6 +110,9 @@ robots
       EnviarMensaje(posicion,fiscal)
       EnviarMensaje(cant,fiscal)
       RecibirMensaje(avanzar,fiscal)
+    RecibirMensaje(avanzar,fiscal)
+    si(avanzar = V)
+      Pos(50,50)
   fin
   robot robotF
   variables
@@ -99,6 +120,7 @@ robots
     cantAux : numero
     posMax : numero
     pos : numero
+    aux : numero
   comenzar
     maxCant := -1
     {Iniciar robot1}
@@ -108,7 +130,8 @@ robots
     EnviarMensaje(4,recolector4)
     {Actividad}
     repetir 10
-      confirmarRobotAleatorio(1,4)
+      Random(aux,1,4)
+      confirmarRobot(aux)
       RecibirMensaje(pos,*)
       filtrarMensaje(pos,cantAux)
       procesarMaximo(maxCant,posMax,cantAux,pos)
@@ -120,6 +143,8 @@ robots
     {Informe de datos}
     Informar(posMax)  {Numero}
     Informar(maxCant) {Cantidad}
+    confirmarRobot(posMax)
+    cancelarRobotRestantes(posMax)
   fin
 variables
   recolector1: robot1

@@ -1,0 +1,63 @@
+programa ejercicio2
+procesos
+  proceso apuntarArriba
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso hacerEscalon(E tam:numero)
+  comenzar
+    repetir tam
+      mover
+    derecha
+    repetir tam
+      mover
+  fin
+  proceso hacerEscaleraDescendente(E tam:numero)
+  comenzar
+    mientras(tam > 1)
+      hacerEscalon(tam)
+      apuntarArriba
+      tam := tam - 1
+    hacerEscalon(tam)
+  fin
+  proceso hacerEscaleraAscendente(E tam:numero)
+  variables
+    i:numero
+  comenzar
+    i:=1
+    mientras(i<tam)
+      hacerEscalon(i)
+      apuntarArriba
+      i:=i+1
+    hacerEscalon(tam)
+    
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  comenzar
+    hacerEscaleraDescendente(6)
+    repetir 2
+      derecha
+    hacerEscaleraAscendente(6)
+  fin
+  robot robot2
+  comenzar
+    apuntarArriba
+    hacerEscaleraDescendente(6)
+    apuntarArriba
+    mover
+    derecha
+    hacerEscaleraAscendente(6)
+  fin
+variables
+  robotIzquierdo: robot1
+  robotDerecho: robot2
+comenzar
+  AsignarArea(robotIzquierdo, ciudad)
+  AsignarArea(robotDerecho, ciudad)
+  Iniciar(robotIzquierdo, 1,1)
+  Iniciar(robotDerecho, 44,1)
+fin
