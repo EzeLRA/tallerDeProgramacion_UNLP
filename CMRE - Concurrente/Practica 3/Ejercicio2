@@ -1,63 +1,217 @@
+{Bloquear y desbloquear esquina 16,16}
 programa ejercicio2
 procesos
-  proceso apuntarArriba
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores := flores + 1
+  fin
+  proceso juntarPapeles(ES papeles:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles := papeles + 1
+  fin
+  proceso izquierda
   comenzar
     repetir 3
       derecha
   fin
-  proceso hacerEscalon(E tam:numero)
+  proceso ultimoEscalonFlores(ES cant:numero)
   comenzar
+    {Escalon}
+    juntarFlores(cant)
+    repetir 1
+      mover
+    juntarFlores(cant)
+    derecha
+    repetir 1
+      mover
+  fin
+  proceso hacerEscaleraDescendente_ContarF(E tam:numero; ES cant:numero)
+  variables
+    escalones : numero
+  comenzar
+    escalones := tam-1
+    {Recorrido}
+    repetir escalones
+      {Escalon}
+      juntarFlores(cant)
+      repetir tam
+        mover
+      juntarFlores(cant)
+      derecha
+      repetir tam
+        mover
+      izquierda
+      tam := tam - 1
+  fin
+  proceso hacerEscaleraAscendente_ContarF(E tam:numero;ES cant:numero)
+  variables
+    escalones:numero
+  comenzar
+    escalones := tam - 1
+    tam := 2
+    {Escalon}
     repetir tam
       mover
+    juntarFlores(cant)
     derecha
     repetir tam
       mover
+    {Recorrido}
+    tam := tam + 1
+    izquierda
+    repetir escalones
+      {Escalon}
+      juntarFlores(cant)
+      repetir tam
+        mover
+      juntarFlores(cant)
+      derecha
+      repetir tam
+        mover
+      izquierda
+      tam := tam + 1
   fin
-  proceso hacerEscaleraDescendente(E tam:numero)
+  proceso ultimoEscalonPapeles(ES cant:numero)
   comenzar
-    mientras(tam > 1)
-      hacerEscalon(tam)
-      apuntarArriba
-      tam := tam - 1
-    hacerEscalon(tam)
+    {Escalon}
+    juntarPapeles(cant)
+    repetir 1
+      mover
+    juntarPapeles(cant)
+    izquierda
+    repetir 1
+      mover
   fin
-  proceso hacerEscaleraAscendente(E tam:numero)
+  proceso hacerEscaleraDescendente_ContarP(E tam:numero; ES cant:numero)
   variables
-    i:numero
+    escalones : numero
   comenzar
-    i:=1
-    mientras(i<tam)
-      hacerEscalon(i)
-      apuntarArriba
-      i:=i+1
-    hacerEscalon(tam)
-    
+    escalones := tam-1
+    {Recorrido}
+    repetir escalones
+      {Escalon}
+      juntarPapeles(cant)
+      repetir tam
+        mover
+      juntarPapeles(cant)
+      izquierda
+      repetir tam
+        mover
+      derecha
+      tam := tam - 1
+  fin
+  proceso hacerEscaleraAscendente_ContarP(E tam:numero;ES cant:numero)
+  variables
+    escalones:numero
+  comenzar
+    escalones := tam - 1
+    tam := 2
+    {Recorrido}
+    {Escalon}
+    repetir tam
+      mover
+    juntarPapeles(cant)
+    izquierda
+    repetir tam
+      mover
+    derecha
+    {Recorrido}
+    tam := tam + 1
+    repetir escalones
+      {Escalon}
+      juntarPapeles(cant)
+      repetir tam
+        mover
+      juntarPapeles(cant)
+      izquierda
+      repetir tam
+        mover
+      derecha
+      tam := tam + 1
   fin
 areas
-  ciudad: AreaC (1,1,100,100)
+  planoIzquierdo: AreaP (1,1,14,30)
+  planoIzquierdo2: AreaP (15,2,15,30)
+  planoDerecho: AreaP (17,1,31,30)
+  puntoCentro: AreaPC (16,16,16,16)
+  puestoFiscal: AreaP(15,1,15,1)
 robots
   robot robot1
+  variables
+    pos : numero
+    flores : numero
   comenzar
-    hacerEscaleraDescendente(6)
+    RecibirMensaje(pos,robotFiscal)
+    flores := 0
+    {Hacer escalera}
+    hacerEscaleraDescendente_ContarF(5,flores)
+    {Centro 16,16}
+    BloquearEsquina(16,16)
+    ultimoEscalonFlores(flores)
+    EnviarMensaje(pos,robotFiscal)
+    juntarFlores(flores)
     repetir 2
       derecha
-    hacerEscaleraAscendente(6)
+    mover
+    LiberarEsquina(16,16)
+    {Hacer escalera}
+    hacerEscaleraAscendente_ContarF(4,flores)
+    Informar(flores)
+    EnviarMensaje(V,robotFiscal)
   fin
   robot robot2
+  variables
+    pos : numero
+    papeles : numero
   comenzar
-    apuntarArriba
-    hacerEscaleraDescendente(6)
-    apuntarArriba
-    mover
+    RecibirMensaje(pos,robotFiscal)
+    papeles := 0
+    {Hacer escalera}
+    hacerEscaleraDescendente_ContarP(5,papeles)
+    {Centro 16,16}
+    BloquearEsquina(16,16)
+    ultimoEscalonPapeles(papeles)
+    EnviarMensaje(pos,robotFiscal)
     derecha
-    hacerEscaleraAscendente(6)
+    juntarPapeles(papeles)
+    derecha
+    mover
+    LiberarEsquina(16,16)
+    {Hacer escalera}
+    hacerEscaleraAscendente_ContarP(4,papeles)
+    Informar(papeles)
+    EnviarMensaje(V,robotFiscal)
+  fin
+  robot robot3
+  variables
+    primero:numero
+    segundo:numero
+    terminado:boolean
+  comenzar
+    EnviarMensaje(1,robotIzquierdo)
+    EnviarMensaje(2,robotDerecho)
+    RecibirMensaje(primero,*)
+    RecibirMensaje(segundo,*)
+    repetir 2
+      RecibirMensaje(terminado,*)
+    Informar(primero)
   fin
 variables
   robotIzquierdo: robot1
   robotDerecho: robot2
+  robotFiscal: robot3
 comenzar
-  AsignarArea(robotIzquierdo, ciudad)
-  AsignarArea(robotDerecho, ciudad)
+  AsignarArea(robotIzquierdo, planoIzquierdo)
+  AsignarArea(robotIzquierdo, planoIzquierdo2)
+  AsignarArea(robotDerecho, planoDerecho)
+  AsignarArea(robotIzquierdo, puntoCentro)
+  AsignarArea(robotDerecho, puntoCentro)
+  AsignarArea(robotFiscal, puestoFiscal)
   Iniciar(robotIzquierdo, 1,1)
-  Iniciar(robotDerecho, 44,1)
+  Iniciar(robotDerecho, 31,1)
+  Iniciar(robotFiscal, 15,1)
 fin

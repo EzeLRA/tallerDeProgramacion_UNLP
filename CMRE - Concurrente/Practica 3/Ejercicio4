@@ -1,0 +1,82 @@
+{Simplificar el codigo con mas procesos}
+programa ejercicio4
+procesos
+  proceso trasladarFlores_EsquinaSig(E avIni:numero;E caIni:numero;E av:numero;E ca:numero)
+  comenzar
+    {Primer Ingreso}
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      {Traslado}
+      BloquearEsquina(av+1,ca+1)
+      Pos(av+1,ca+1)
+      LiberarEsquina(av,ca)
+      depositarFlor
+      Pos(avIni,caIni)
+      LiberarEsquina(av+1,ca+1)
+      {Regreso}
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+    EnviarMensaje(num,coordinador)
+    Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+  fin
+areas
+  areaProceso: AreaPC (10,10,11,11)
+  puesto1: AreaP (9,9,9,9)
+  puesto2: AreaP (9,10,9,10)
+  puesto3: AreaP (9,11,9,11)
+  puesto4: AreaP (9,12,9,12)
+  puestoCord: AreaP(1,1,1,1)
+robots
+  robot robot1
+  variables
+    num : numero
+  comenzar
+    RecibirMensaje(num,coordinador)
+    trasladarFlores_EsquinaSig(PosAv,PosCa,10,10)
+    {EnviarMensaje(num,coordinador)}
+  fin
+  robot robot2
+  variables
+    ult:numero
+  comenzar
+    EnviarMensaje(1,recolector1)
+    EnviarMensaje(2,recolector2)
+    EnviarMensaje(3,recolector3)
+    EnviarMensaje(4,recolector4)
+    repetir 4
+      RecibirMensaje(ult,*)
+      Informar(ult)
+    Informar(ult)
+    Pos(11,11)
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+    Pos(1,1)
+  fin
+variables
+  recolector1: robot1
+  recolector2: robot1
+  recolector3: robot1
+  recolector4: robot1
+  coordinador: robot2
+comenzar
+  {Area de proceso}
+  AsignarArea(coordinador, puestoCord)
+  AsignarArea(coordinador, areaProceso)
+  AsignarArea(recolector1, areaProceso)
+  AsignarArea(recolector2, areaProceso)
+  AsignarArea(recolector3, areaProceso)
+  AsignarArea(recolector4, areaProceso)
+  {Puestos}
+  AsignarArea(recolector1, puesto1)
+  AsignarArea(recolector2, puesto2)
+  AsignarArea(recolector3, puesto3)
+  AsignarArea(recolector4, puesto4)
+  Iniciar(coordinador, 1,1)
+  Iniciar(recolector1, 9,9)
+  Iniciar(recolector2, 9,10)
+  Iniciar(recolector3, 9,11)
+  Iniciar(recolector4, 9,12)
+fin

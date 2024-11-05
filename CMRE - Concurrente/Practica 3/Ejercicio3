@@ -1,0 +1,125 @@
+programa ejercicio3
+procesos
+  {procesos de los jefes}
+  proceso enviarIDs
+  comenzar
+    EnviarMensaje(1,florero1)
+    EnviarMensaje(2,florero2)
+    EnviarMensaje(3,florero3)
+    EnviarMensaje(4,florero4)
+  fin
+  proceso enviarEsquinaProcesar(E av:numero;E ca:numero)
+  comenzar
+    EnviarMensaje(av,florero1)
+    EnviarMensaje(ca,florero1)
+    EnviarMensaje(av,florero2)
+    EnviarMensaje(ca,florero2)
+    EnviarMensaje(av,florero3)
+    EnviarMensaje(ca,florero3)
+    EnviarMensaje(av,florero4)
+    EnviarMensaje(ca,florero4)
+  fin
+  proceso filtrarMensaje(E id:numero;ES cant:numero)
+  comenzar
+    si(id=1)
+      RecibirMensaje(cant,florero1)
+    sino
+      si(id=2)
+        RecibirMensaje(cant,florero2)
+      sino
+        si(id=3)
+          RecibirMensaje(cant,florero3)
+        sino
+          RecibirMensaje(cant,florero4)
+  fin
+  proceso procesarMax(E id:numero;E cant:numero;ES idMax:numero;ES cantMax:numero)
+  comenzar
+    si(cantMax < cant)
+      cantMax := cant
+      idMax := id
+  fin
+  {procesos de los floreros}
+  proceso procesarEsquina_Regresar(ES flores:numero;E av:numero;E ca:numero)
+  variables
+    avIni:numero
+    caIni:numero
+  comenzar
+    avIni := PosAv
+    caIni := PosCa
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores := flores + 1
+      Pos(avIni,caIni)
+      LiberarEsquina(av,ca)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+    Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+  fin
+areas
+  areaProceso: AreaPC (2,2,10,10)
+  puestoJefe: AreaP (1,1,1,1)
+  puesto1: AreaP(2,1,2,1)
+  puesto2: AreaP(3,1,3,1)
+  puesto3: AreaP(4,1,4,1)
+  puesto4: AreaP(5,1,5,1)
+robots
+  robot robotFlores
+  variables
+    flores:numero
+    num:numero
+    posAv:numero
+    posCa:numero
+  comenzar
+    flores := 0
+    RecibirMensaje(num,jefe)
+    RecibirMensaje(posAv,jefe)
+    RecibirMensaje(posCa,jefe)
+    procesarEsquina_Regresar(flores,posAv,posCa)
+    EnviarMensaje(num,jefe)
+    EnviarMensaje(flores,jefe)
+  fin
+  robot robotJefe
+  variables
+    posAv:numero
+    posCa:numero
+    cant:numero
+    max:numero
+    id:numero
+    idMax:numero
+  comenzar
+    max := -1
+    enviarIDs
+    Random(posAv,2,10)
+    Random(posCa,2,10)
+    enviarEsquinaProcesar(posAv,posCa)
+    repetir 4
+      RecibirMensaje(id,*)
+      filtrarMensaje(id,cant)
+      procesarMax(id,cant,idMax,max)
+    Informar(id)
+  fin
+variables
+  jefe: robotJefe
+  florero1: robotFlores
+  florero2: robotFlores
+  florero3: robotFlores
+  florero4: robotFlores
+comenzar
+  AsignarArea(jefe, puestoJefe)
+  AsignarArea(florero1,puesto1)
+  AsignarArea(florero2,puesto2)
+  AsignarArea(florero3,puesto3)
+  AsignarArea(florero4,puesto4)
+  AsignarArea(florero1,areaProceso)
+  AsignarArea(florero2,areaProceso)
+  AsignarArea(florero3,areaProceso)
+  AsignarArea(florero4,areaProceso)
+  Iniciar(jefe, 1,1)
+  Iniciar(florero1, 2,1)
+  Iniciar(florero2, 3,1)
+  Iniciar(florero3, 4,1)
+  Iniciar(florero4, 5,1)
+fin
