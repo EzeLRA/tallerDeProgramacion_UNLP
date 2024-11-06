@@ -1,7 +1,7 @@
-programa ejercicio4
+programa ejercicio4b
 procesos
   {Procesos jefe}
-  proceso enviarIds
+  proceso EnviarIds
   comenzar
     EnviarMensaje(1,recolector1)
     EnviarMensaje(2,recolector2)
@@ -14,7 +14,23 @@ procesos
       tomarFlor
   fin
   {Procesos recolectores}
-  proceso moverFlor(ES continuar:boolean;E av:numero;E ca:numero)
+  proceso dejarFlor_Esquina(E av:numero;E ca:numero)
+  variables
+    avIni:numero
+    caIni:numero
+  comenzar
+    si HayFlorEnLaBolsa
+      {Robot Ubicado en su puesto}
+      avIni := PosAv
+      caIni := PosCa
+      {Ingreso}
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      depositarFlor
+      Pos(avIni,caIni)
+      LiberarEsquina(av,ca)
+  fin
+  proceso obtenerFlor_Esquina(ES continuar:boolean;E av:numero;E ca:numero)
   variables
     avIni:numero
     caIni:numero
@@ -22,18 +38,13 @@ procesos
     {Robot Ubicado en su puesto}
     avIni := PosAv
     caIni := PosCa
-    {Primer Ingreso}
+    {Ingreso}
     BloquearEsquina(av,ca)
     Pos(av,ca)
     si HayFlorEnLaEsquina
       tomarFlor
-      {Traslado}
-      BloquearEsquina(av+1,ca+1)
-      Pos(av+1,ca+1)
-      LiberarEsquina(av,ca)
-      depositarFlor
       Pos(avIni,caIni)
-      LiberarEsquina(av+1,ca+1)
+      LiberarEsquina(av,ca)
     sino
       Pos(avIni,caIni)
       LiberarEsquina(av,ca)
@@ -55,7 +66,8 @@ robots
     ciclo := V
     RecibirMensaje(num,coordinador)
     mientras(ciclo = V)
-      moverFlor(ciclo,10,10)
+      obtenerFlor_Esquina(ciclo,10,10)
+      dejarFlor_Esquina(11,11)
     EnviarMensaje(num,coordinador)
   fin
   robot robot2
