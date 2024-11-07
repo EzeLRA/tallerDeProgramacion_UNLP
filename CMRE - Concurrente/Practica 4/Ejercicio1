@@ -1,0 +1,125 @@
+{-----------------------------}
+{Ejercicio: Cliente y Servidor}
+{-----------------------------}
+programa ejercicio1
+procesos
+  {Procesos para el servidor}
+  proceso comunicar_Robot(ES id:numero)
+  comenzar
+    si(id=1)
+      EnviarMensaje(V,cliente1)
+    sino
+      si(id=2)
+        EnviarMensaje(V,cliente2)
+      sino
+        EnviarMensaje(V,cliente3)
+  fin
+  proceso filtrarMensaje(ES id:numero; ES cant:numero; ES av:numero; ES ca:numero)
+  variables
+    ids:numero
+  comenzar
+    RecibirMensaje(ids,*)
+    si(ids=1)
+      id := 1
+      RecibirMensaje(cant,cliente1)
+      RecibirMensaje(av,cliente1)
+      RecibirMensaje(ca,cliente1)
+    sino
+      si(ids=2)
+        id := 2
+        RecibirMensaje(cant,cliente2)
+        RecibirMensaje(av,cliente2)
+        RecibirMensaje(ca,cliente2)
+      sino
+        id := 3
+        RecibirMensaje(cant,cliente3)
+        RecibirMensaje(av,cliente3)
+        RecibirMensaje(ca,cliente3)
+  fin
+  proceso enviarIds
+  comenzar
+    EnviarMensaje(1,cliente1)
+  fin
+  {Procesos para clientes}
+  proceso calcularRandomFlores(ES flores: numero)
+  variables
+    rand:numero
+  comenzar
+    Random(rand,1,4)
+    flores := rand
+  fin
+  proceso comunicarConServidor(E id:numero ; E cant:numero ; E Av:numero ; E Ca:numero)
+  comenzar
+    EnviarMensaje(id,servidor)
+    EnviarMensaje(cant,servidor)
+    EnviarMensaje(Av,servidor)
+    EnviarMensaje(Ca,servidor)
+  fin
+  proceso juntarFlores
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+  fin
+  proceso avanzarFlores
+  comenzar
+    mientras ((PosCa<99)&(HayFlorEnLaBolsa))
+      depositarFlor
+      mover
+  fin
+areas
+  pista1: AreaPC (1,1,1,100)
+  base: AreaP (100,100,100,100)
+robots
+  robot cliente
+  variables
+    id:numero
+    floresPedir:numero
+    ack:boolean {booleano de operacion del servidor completado}
+  comenzar
+    {Inicializacion}
+    RecibirMensaje(id,servidor)
+    {--Procesos--}
+    calcularRandomFlores(floresPedir)
+    {comunicacion al server}
+    comunicarConServidor(id,floresPedir,PosAv,PosCa)
+    RecibirMensaje(ack,servidor)
+    {Recepcion de flores}
+    Pos(PosAv,PosCa+1)
+    juntarFlores
+    Pos(PosAv,PosCa-1)
+    avanzarFlores
+  fin
+  robot server
+  variables
+    avIni:numero
+    caIni:numero
+    cant:numero
+    posX:numero
+    posY:numero
+    id:numero
+    clientesDispo:numero
+  comenzar
+    clientesDispo:=3
+    enviarIds
+    {mientras (clientesDispo>0)}
+    filtrarMensaje(id,cant,posX,posY)
+    avIni := PosAv
+    caIni := PosCa
+    repetir cant
+      tomarFlor
+    Pos(posX,posY+1)
+    repetir cant
+      depositarFlor
+    Pos(avIni,caIni)
+    comunicar_Robot(id)
+  fin
+variables
+  cliente1: cliente
+  servidor: server
+comenzar
+  AsignarArea(cliente1, pista1)
+  AsignarArea(servidor, pista1)
+  AsignarArea(servidor, base)
+  Iniciar(cliente1, 1,1)
+  Iniciar(servidor,100,100)
+fin

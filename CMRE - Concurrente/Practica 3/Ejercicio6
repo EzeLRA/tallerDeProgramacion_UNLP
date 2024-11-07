@@ -1,0 +1,80 @@
+programa ejercicio6A
+procesos
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+  proceso juntarPapeles(ES papeles:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles:=papeles+1
+  fin
+areas
+  areaProceso: AreaPC (1,1,17,17)
+robots
+  robot recolectorFlores
+  variables
+    flores:numero
+    tam:numero
+  comenzar
+    flores:=0
+    RecibirMensaje(tam,fiscal)
+    repetir 4
+      repetir tam
+        mover
+        juntarFlores(flores)
+      derecha
+  fin
+  robot recolectorPapeles
+  variables
+    papeles:numero
+    tam:numero
+  comenzar
+    papeles:=0
+    RecibirMensaje(tam,fiscal)
+    repetir 4
+      repetir tam
+        mover
+        juntarPapeles(papeles)
+      derecha
+  fin
+  robot recolectorFP
+  variables
+    flores:numero
+    papeles:numero
+    tam:numero
+  comenzar
+    flores:=0
+    papeles:=0
+    RecibirMensaje(tam,fiscal)
+    repetir 4
+      repetir tam
+        mover
+        juntarFlores(flores)
+        juntarPapeles(papeles)
+      derecha
+  fin
+  robot Fiscal
+  comenzar
+    EnviarMensaje(6,robi1)
+    EnviarMensaje(10,robi2)
+    EnviarMensaje(7,robi3)
+  fin
+variables
+  robi1: recolectorFlores
+  robi2: recolectorPapeles
+  robi3: recolectorFP
+  fiscal: Fiscal
+comenzar
+  AsignarArea(robi1, areaProceso)
+  AsignarArea(robi2, areaProceso)
+  AsignarArea(robi3, areaProceso)
+  AsignarArea(fiscal, areaProceso)
+  Iniciar(robi1, 2,2)
+  Iniciar(robi2, 5,5)
+  Iniciar(robi3, 9,9)
+  Iniciar(fiscal,17,1)
+fin

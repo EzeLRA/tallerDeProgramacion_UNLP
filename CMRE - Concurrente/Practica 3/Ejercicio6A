@@ -1,0 +1,232 @@
+programa ejercicio6A
+procesos
+  proceso avanzar
+  comenzar
+    mientras((PosAv<100)&((HayFlorEnLaBolsa)|(HayPapelEnLaBolsa)))
+      si(HayFlorEnLaBolsa)
+        depositarFlor
+      si(HayPapelEnLaBolsa)
+        depositarPapel
+      mover
+  fin
+  proceso ubicarseEnLaPista
+  variables
+    posCa:numero
+  comenzar
+    RecibirMensaje(posCa,fiscal)
+    Pos(1,posCa)
+    derecha
+  fin
+  proceso enviarPista(E ids:numero;ES posCa:numero)
+  comenzar
+    si(ids=1)
+      EnviarMensaje(posCa,robi1)
+    sino
+      si(ids=2)
+        EnviarMensaje(posCa,robi2)
+      sino
+        EnviarMensaje(posCa,robi3)
+  fin
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+  proceso juntarPapeles(ES papeles:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles:=papeles+1
+  fin
+areas
+  areaProceso: AreaPC (1,1,17,17)
+  pista1: AreaPC (1,20,100,20) 
+  pista2: AreaPC (1,21,100,21)
+  pista3: AreaPC (1,22,100,22)
+robots
+  robot recolectorFlores
+  variables
+    ID:numero
+    flores:numero
+    tam:numero
+  comenzar
+    flores:=0
+    RecibirMensaje(tam,fiscal)
+    RecibirMensaje(ID,fiscal)
+    {lado1}
+    repetir tam
+      mover
+      juntarFlores(flores)
+    derecha
+    {lado2}
+    repetir tam-4
+      mover
+      juntarFlores(flores)
+    BloquearEsquina(PosAv+1,PosCa)
+    mover
+    juntarFlores(flores)
+    mover
+    LiberarEsquina(PosAv-1,PosCa)
+    repetir tam-4
+      mover
+    derecha
+    {lado3}
+    repetir tam-4
+      mover
+      juntarFlores(flores)
+    BloquearEsquina(PosAv+1,PosCa)
+    mover
+    juntarFlores(flores)
+    mover
+    LiberarEsquina(PosAv-1,PosCa)
+    repetir tam-4
+      mover
+    derecha
+    {lado4}
+    repetir tam
+      mover
+      juntarFlores(flores)
+    derecha
+    EnviarMensaje(ID,fiscal)
+    ubicarseEnLaPista
+    {Recorrer calle}
+    avanzar
+  fin
+  robot recolectorPapeles
+  variables
+    ID:numero
+    papeles:numero
+    tam:numero
+    aux:numero
+  comenzar
+    papeles:=0
+    RecibirMensaje(tam,fiscal)
+    RecibirMensaje(ID,fiscal)
+    repetir 4
+      aux:=0
+      mientras aux<tam
+        si((PosCa=7)&(PosAv=5))
+          BloquearEsquina(5,8)
+          mover
+          juntarPapeles(papeles)
+          mover
+          LiberarEsquina(5,8)
+          aux:=aux+2
+        sino
+          si((PosCa=15)&(PosAv=8))
+            BloquearEsquina(9,15)
+            mover
+            juntarPapeles(papeles)
+            mover
+            LiberarEsquina(9,15)
+            aux:=aux+2
+          sino
+            si((PosCa=10)&(PosAv=15))
+              BloquearEsquina(15,9)
+              mover
+              juntarPapeles(papeles)
+              mover
+              LiberarEsquina(15,9)
+              aux:=aux+2
+            sino
+              mover
+              juntarPapeles(papeles)
+              aux:=aux+1
+      derecha
+    EnviarMensaje(ID,fiscal)
+    ubicarseEnLaPista
+    {Recorrer calle}
+    avanzar
+  fin
+  robot recolectorFP
+  variables
+    ID:numero
+    flores:numero
+    papeles:numero
+    tam:numero
+    aux:numero
+    continuar:boolean
+  comenzar
+    flores:=0
+    papeles:=0
+    RecibirMensaje(tam,fiscal)
+    RecibirMensaje(ID,fiscal)
+    repetir 4
+      aux:=0
+      mientras aux<tam
+        si((PosCa=14)&(PosAv=9))
+          BloquearEsquina(15,9)
+          mover
+          juntarFlores(flores)
+          juntarPapeles(papeles)
+          mover
+          LiberarEsquina(15,9)
+          aux:=aux+2
+        sino
+          si((PosCa=9)&(PosAv=16))
+            BloquearEsquina(15,9)
+            mover
+            juntarFlores(flores)
+            juntarPapeles(papeles)
+            mover
+            LiberarEsquina(15,9)
+            aux:=aux+2
+          sino 
+            mover
+            juntarFlores(flores)
+            juntarPapeles(papeles)
+            aux:=aux+1
+      derecha
+    EnviarMensaje(ID,fiscal)
+    ubicarseEnLaPista
+    {Recorrer calle}
+    avanzar
+  fin
+  robot Fiscal
+  variables
+    ids:numero
+    posCa:numero
+  comenzar
+    {Asignacion de tamanios}
+    EnviarMensaje(6,robi1)
+    EnviarMensaje(10,robi2)
+    EnviarMensaje(7,robi3)
+    {Asignacion de numeros}
+    EnviarMensaje(1,robi1)
+    EnviarMensaje(2,robi2)
+    EnviarMensaje(3,robi3)
+    {Filtrado y envio de coordenadas}
+    posCa := 20
+    repetir 3
+      RecibirMensaje(ids,*)
+      enviarPista(ids,posCa)
+      posCa := posCa + 1
+  fin
+variables
+  robi1: recolectorFlores
+  robi2: recolectorFP
+  robi3: recolectorPapeles
+  fiscal: Fiscal
+comenzar
+  {Area de procesos}
+  AsignarArea(robi1, areaProceso)
+  AsignarArea(robi2, areaProceso)
+  AsignarArea(robi3, areaProceso)
+  AsignarArea(fiscal, areaProceso)
+  {Pistas}
+  AsignarArea(robi1,pista1)
+  AsignarArea(robi2,pista1)
+  AsignarArea(robi3,pista1)
+  AsignarArea(robi1,pista2)
+  AsignarArea(robi2,pista2)
+  AsignarArea(robi3,pista2)
+  AsignarArea(robi1,pista3)
+  AsignarArea(robi2,pista3)
+  AsignarArea(robi3,pista3)
+  {Inicio}
+  Iniciar(robi1, 2,2)
+  Iniciar(robi2, 5,5)
+  Iniciar(robi3, 9,9)
+  Iniciar(fiscal,17,1)
+fin

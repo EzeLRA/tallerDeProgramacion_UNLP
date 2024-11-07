@@ -1,0 +1,114 @@
+programa ejercicio5
+procesos
+  proceso filtrarMensaje(ES cant:numero; ES pos:numero)
+  variables
+    num:numero
+  comenzar
+    RecibirMensaje(num,*)
+    si(num = 1)
+      RecibirMensaje(cant,robi1)
+    sino
+      si(num = 2)
+        RecibirMensaje(cant,robi2)
+      sino
+        si(num = 3)
+          RecibirMensaje(cant,robi3)
+        sino
+          RecibirMensaje(cant,robi4)
+    pos := num
+  fin
+  proceso procesarMax(E cant:numero;E num:numero;ES cantMax:numero;ES numMax:numero)
+  comenzar
+    si(cantMax < cant)
+      cantMax := cant
+      numMax := num
+  fin
+  proceso avanzar_DejarPapel(ES continuar:boolean)
+  comenzar
+    si((PosCa<100)&(HayPapelEnLaBolsa))
+      depositarPapel
+      mover
+    sino
+      continuar := F
+  fin
+  proceso obtenerPapelEsquina(E av:numero;E ca:numero;E avIni:numero;E caIni:numero;ES continuar:boolean;ES cant:numero)
+  comenzar
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    si HayPapelEnLaEsquina
+      tomarPapel
+      Pos(avIni,caIni)
+      cant := cant + 1
+    sino
+      continuar := F
+      Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+  fin
+areas
+  puestoFiscal: AreaP (1,10,1,10)
+  almacen: AreaPC(11,11,11,11)
+  pista1: AreaP (4,1,4,100)
+  pista2: AreaP (6,1,6,100)
+  pista3: AreaP (8,1,8,100)
+  pista4: AreaP (10,1,10,100)
+robots
+  robot competidor
+  variables
+    num:numero
+    continuar:boolean
+    papeles:numero
+  comenzar
+    papeles := 0
+    continuar := V
+    RecibirMensaje(num,fiscal)
+    mientras (continuar)
+      obtenerPapelEsquina(11,11,PosAv,PosCa,continuar,papeles)
+      avanzar_DejarPapel(continuar)
+    EnviarMensaje(num,fiscal)
+    EnviarMensaje(papeles,fiscal)
+  fin
+  robot robotFiscal
+  variables
+    cant : numero
+    num : numero
+    cantMax : numero
+    numMax : numero
+  comenzar
+    cantMax := -1
+    {Ubicar competidores}
+    EnviarMensaje(1,robi1)
+    EnviarMensaje(2,robi2)
+    EnviarMensaje(3,robi3)
+    EnviarMensaje(4,robi4)
+    {Filtrar Mensaje}
+    repetir 4
+      filtrarMensaje(cant,num)
+      procesarMax(cant,num,cantMax,numMax)
+    Informar(numMax)
+    Informar(cantMax)
+  fin
+variables
+  robi1: competidor
+  robi2: competidor
+  robi3: competidor
+  robi4: competidor
+  fiscal: robotFiscal
+comenzar
+  {Puesto de espera o inicio}
+  AsignarArea(fiscal, puestoFiscal)
+  {Almacen}
+  AsignarArea(robi1, almacen)
+  AsignarArea(robi2, almacen)
+  AsignarArea(robi3, almacen)
+  AsignarArea(robi4, almacen)
+  {Puesto de carrera}
+  AsignarArea(robi1, pista1)
+  AsignarArea(robi2, pista2)
+  AsignarArea(robi3, pista3)
+  AsignarArea(robi4, pista4)
+  Iniciar(robi1, 4,1)
+  Iniciar(robi2, 6,1)
+  Iniciar(robi3, 8,1)
+  Iniciar(robi4, 10,1)
+  Iniciar(fiscal,1,10)
+fin
