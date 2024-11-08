@@ -1,0 +1,108 @@
+programa ejercicio2
+{--------------------------}
+{Productores y consumidores}
+{--------------------------}
+procesos
+  {Procesos para productores}
+  proceso enviarCarga_Esquina(ES cant:numero;E av:numero;E ca:numero)
+  variables
+    avIni:numero
+    caIni:numero
+  comenzar
+    avIni := PosAv
+    caIni := PosCa
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    repetir cant
+      depositarPapel
+    Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+    cant := 0
+  fin
+  {Procesos para consumidores}
+  proceso retirarP_Esquina(E cant:numero;ES papeles:numero;E av:numero;E ca:numero)
+  variables
+    avIni:numero
+    caIni:numero
+  comenzar
+    avIni := PosAv
+    caIni := PosCa
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    mientras ((HayPapelEnLaEsquina)&(papeles<cant))
+      tomarPapel
+      papeles:=papeles+1
+    si (papeles<>cant)
+      repetir papeles
+        depositarPapel
+    Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+  fin
+areas
+  pista1: AreaP (5,1,5,100)
+  pista2: AreaP (10,1,10,100)
+  almacen: AreaC (50,50,50,50)
+  puesto1: AreaP (11,1,11,1)
+  puesto2: AreaP (12,1,12,1)
+robots
+  robot Productor
+  variables
+    papeles:numero
+  comenzar
+    {Inicializacion}
+    papeles := 0
+    {Recorrido}
+    repetir 99
+      mientras HayPapelEnLaEsquina
+        tomarPapel 
+        papeles := papeles + 1
+        si(papeles >= 5)
+          enviarCarga_Esquina(papeles,50,50)
+      si~(HayPapelEnLaEsquina)
+        mover
+    mientras HayPapelEnLaEsquina
+      tomarPapel 
+      papeles := papeles + 1
+      si(papeles >= 5)
+        enviarCarga_Esquina(papeles,50,50)
+  fin
+  robot Consumidor
+  variables
+    papeles : numero
+    intentos : numero
+    cant : numero
+  comenzar
+    {Inicio}
+    papeles := 0
+    intentos := 0
+    {Consulta}
+    mientras(intentos < 8)
+      Random(cant,2,5)
+      retirarP_Esquina(cant,papeles,50,50)
+      si(cant=papeles)
+        intentos := 0
+        repetir papeles
+          depositarPapel
+      sino
+        intentos := intentos + 1
+      papeles:=0
+  fin
+variables
+  productor1: Productor
+  productor2: Productor
+  consumidor1: Consumidor
+  consumidor2: Consumidor
+comenzar
+  AsignarArea(productor1, pista1)
+  AsignarArea(consumidor1, puesto1)
+  AsignarArea(productor2, pista2)
+  AsignarArea(consumidor2, puesto2)
+  AsignarArea(productor1, almacen)
+  AsignarArea(consumidor1, almacen)
+  AsignarArea(productor2, almacen)
+  AsignarArea(consumidor2, almacen)
+  Iniciar(productor1, 5,1)
+  Iniciar(productor2, 10,1)
+  Iniciar(consumidor1, 11,1)
+  Iniciar(consumidor2, 12,1)
+fin
