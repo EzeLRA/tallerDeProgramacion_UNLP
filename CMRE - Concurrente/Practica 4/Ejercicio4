@@ -1,0 +1,117 @@
+programa ejercicio5
+{-------------------}
+{Jefe y trabajadores}
+{-------------------}
+procesos
+  proceso recogerFlores(ES cant: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant := cant + 1
+  fin
+  proceso recogerPapeles(ES cant: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cant := cant + 1
+  fin
+  proceso vaciarBolsa(E flores:numero;E papeles:numero)
+  comenzar
+    repetir flores
+      depositarFlor
+    flores := 0
+    repetir papeles
+      depositarPapel
+    papeles := 0
+  fin
+  proceso procesarEsquina(E tareaNum:numero;E av:numero;E ca:numero;ES flores:numero;ES papeles:numero)
+  variables
+    avIni:numero
+    caIni:numero
+  comenzar
+    avIni := PosAv
+    caIni := PosCa
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    si(tareaNum = 1)
+      recogerFlores(flores)
+    sino
+      si(tareaNum = 2)
+        recogerPapeles(papeles)
+      sino
+        vaciarBolsa(flores,papeles)
+    Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+  fin
+areas
+  areaTrabajo: AreaPC (2,2,100,100)
+  puestoJefe: AreaP (1,1,1,1)
+  puesto1: AreaP (2,1,2,1)
+  puesto2: AreaP (3,1,3,1)
+robots
+  robot trabajador
+  variables
+    flores:numero
+    papeles:numero
+    tareaNum:numero
+    av:numero
+    ca:numero
+    id:numero
+  comenzar
+    flores := 0
+    papeles := 0
+    RecibirMensaje(id,jefe)
+    RecibirMensaje(tareaNum,jefe)
+    mientras(tareaNum <> 4)
+      RecibirMensaje(av,jefe)
+      RecibirMensaje(ca,jefe)
+      procesarEsquina(tareaNum,av,ca,flores,papeles)
+      {EnviarMensaje(id,jefe)}{Aviso de fin de tarea}
+      RecibirMensaje(tareaNum,jefe)
+  fin
+  robot Jefe
+  variables
+    numTarea : numero
+    numEmpleado : numero
+    tareasCant : numero
+    esperar : boolean
+    av: numero
+    ca: numero
+  comenzar
+    tareasCant := 8
+    EnviarMensaje(1,t1)
+    EnviarMensaje(2,t2)
+    mientras (tareasCant>0)
+      Random(numEmpleado,1,2)
+      si(numEmpleado = 1)
+        Random(numTarea,1,3)
+        EnviarMensaje(numTarea,t1)
+        Random(av,2,100)
+        EnviarMensaje(av,t1)
+        Random(ca,2,100)
+        EnviarMensaje(ca,t1)
+      sino
+        Random(numTarea,1,3)
+        EnviarMensaje(numTarea,t2)
+        Random(av,2,100)
+        EnviarMensaje(av,t2)
+        Random(ca,2,100)
+        EnviarMensaje(ca,t2)
+      tareasCant := tareasCant - 1
+    EnviarMensaje(4,t1)
+    EnviarMensaje(4,t2)
+  fin
+variables
+  t1 : trabajador
+  t2 : trabajador
+  jefe : Jefe
+comenzar
+  AsignarArea(t1, areaTrabajo)
+  AsignarArea(t1, puesto1)
+  AsignarArea(t2, areaTrabajo)
+  AsignarArea(t2, puesto2)
+  AsignarArea(jefe, puestoJefe)
+  Iniciar(jefe, 1,1)
+  Iniciar(t1, 2,1)
+  Iniciar(t2, 3,1)
+fin

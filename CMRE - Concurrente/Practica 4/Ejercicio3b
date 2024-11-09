@@ -1,0 +1,100 @@
+{Volver a pensarlo}
+programa ejercicio3b
+{----------------------}
+{Sincronizacion barrera}
+{----------------------}
+procesos
+  proceso esperarRespuesta(ES continuar:boolean)
+  variables
+    ent1:boolean
+    ent2:boolean
+  comenzar
+    RecibirMensaje(ent1,*)
+    RecibirMensaje(ent2,*)
+    continuar := (ent1 & ent2)
+  fin
+  proceso comunicarRobots(E id:numero)
+  comenzar
+    si(id=1)
+      EnviarMensaje(V,recolector2)
+      EnviarMensaje(V,recolector3)
+    sino  
+      si(id=2)
+        EnviarMensaje(V,recolector1)
+        EnviarMensaje(V,recolector3)
+      sino
+        EnviarMensaje(V,recolector1)
+        EnviarMensaje(V,recolector2)
+  fin
+  proceso avisarRobots(E id:numero)
+  comenzar
+    si(id=1)
+      EnviarMensaje(F,recolector2)
+      EnviarMensaje(F,recolector3)
+    sino  
+      si(id=2)
+        EnviarMensaje(F,recolector1)
+        EnviarMensaje(F,recolector3)
+      sino
+        EnviarMensaje(F,recolector1)
+        EnviarMensaje(F,recolector2)
+  fin
+  proceso recolectarPapeles(ES cant:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cant := cant + 1
+  fin
+areas
+  pista1: AreaP (1,1,1,100)
+  pista2: AreaP (2,1,2,100)
+  pista3: AreaP (3,1,3,100)
+  puesto: AreaP (4,1,4,1)
+robots
+  robot Recolector
+  variables
+    papeles:numero
+    papelesEspera:numero
+    id:numero
+    continuar : boolean
+  comenzar
+    papeles:=0
+    papelesEspera:=5
+    RecibirMensaje(id,coordinador)
+    comunicarRobots(id)
+    esperarRespuesta(continuar)
+    {Recorrido pensado segun la cantidad de papeles}
+    mientras(PosCa<100)
+      si(continuar)
+        si(papeles<papelesEspera)
+          recolectarPapeles(papeles)
+          mover
+        sino
+          {Comunicacion}
+          avisarRobots(id)
+          papeles := 0
+      comunicarRobots(id)
+      esperarRespuesta(continuar)
+    recolectarPapeles(papeles)
+  fin
+  robot Coordinador
+  comenzar
+    EnviarMensaje(1,recolector1)
+    EnviarMensaje(2,recolector2)
+    EnviarMensaje(3,recolector3)
+  fin
+variables
+  recolector1: Recolector
+  recolector2: Recolector
+  recolector3: Recolector
+  coordinador: Coordinador
+comenzar
+  AsignarArea(recolector1, pista1)
+  AsignarArea(recolector2, pista2)
+  AsignarArea(recolector3, pista3)
+  AsignarArea(coordinador, puesto)
+  Iniciar(recolector1, 1,1)
+  Iniciar(recolector2, 2,1)
+  Iniciar(recolector3, 3,1)
+  Iniciar(coordinador, 4,1)
+fin

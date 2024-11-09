@@ -1,0 +1,77 @@
+programa ejercicio3a
+{----------------------}
+{Sincronizacion barrera}
+{----------------------}
+procesos
+  proceso esperarRespuesta
+  variables
+    continuar:boolean
+  comenzar
+    repetir 2
+      RecibirMensaje(continuar,*)
+  fin
+  proceso comunicarRobots(E id:numero)
+  comenzar
+    si(id=1)
+      EnviarMensaje(V,recolector2)
+      EnviarMensaje(V,recolector3)
+    sino  
+      si(id=2)
+        EnviarMensaje(V,recolector1)
+        EnviarMensaje(V,recolector3)
+      sino
+        EnviarMensaje(V,recolector1)
+        EnviarMensaje(V,recolector2)
+  fin
+  proceso recolectarPapeles(ES cant:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cant := cant + 1
+  fin
+areas
+  pista1: AreaP (1,1,1,100)
+  pista2: AreaP (2,1,2,100)
+  pista3: AreaP (3,1,3,100)
+  puesto: AreaP (4,1,4,1)
+robots
+  robot Recolector
+  variables
+    papeles:numero
+    calleEspera:numero
+    id:numero
+  comenzar
+    papeles:=0
+    RecibirMensaje(id,coordinador)
+    {Recorrido pensado segun la longitud de la calle de espera}
+    mientras(PosCa<100)
+      calleEspera := PosCa + 5
+      mientras((PosCa<100)&(PosCa<calleEspera))
+        recolectarPapeles(papeles)
+        mover
+      {Comunicacion}
+      comunicarRobots(id)
+      esperarRespuesta
+    recolectarPapeles(papeles)
+  fin
+  robot Coordinador
+  comenzar
+    EnviarMensaje(1,recolector1)
+    EnviarMensaje(2,recolector2)
+    EnviarMensaje(3,recolector3)
+  fin
+variables
+  recolector1: Recolector
+  recolector2: Recolector
+  recolector3: Recolector
+  coordinador: Coordinador
+comenzar
+  AsignarArea(recolector1, pista1)
+  AsignarArea(recolector2, pista2)
+  AsignarArea(recolector3, pista3)
+  AsignarArea(coordinador, puesto)
+  Iniciar(recolector1, 1,1)
+  Iniciar(recolector2, 2,1)
+  Iniciar(recolector3, 3,1)
+  Iniciar(coordinador, 4,1)
+fin
