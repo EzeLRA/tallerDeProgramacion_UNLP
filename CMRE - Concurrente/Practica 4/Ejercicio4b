@@ -1,6 +1,9 @@
-{Tener en cuenta que la ejecucion del programa se hace de forma secuencial}
-{Debido a que el jefe esperara a que se reciba un mensaje de finalizacion por parte de X trabajador con tarea asignada de forma aleatoria al igual que el destinatario}
-programa ejercicio4
+{A diferencia de la solucion anterior en el que los trabajadores realizaban las tareas de forma lineal o secuencial}
+{En este programa los robots lo hacen en forma de pila}
+{De modo que el jefe envia todas las intrucciones y finaliza}
+{Y los trabajadores reciben "de a poco" los mensajes hasta finalizar con la instruccion 4 por el jefe}
+{Lo que difiere con la solucion anterior es que los mismos no avisan al jefe que terminaron. Lo que hace que la ejecucion deje de ser secuencial}
+programa ejercicio4b
 {-------------------}
 {Jefe y trabajadores}
 {-------------------}
@@ -33,7 +36,7 @@ procesos
   comenzar
     avIni := PosAv
     caIni := PosCa
-    {BloquearEsquina(av,ca)}
+    BloquearEsquina(av,ca)
     Pos(av,ca)
     si(tareaNum = 1)
       recogerFlores(flores)
@@ -43,7 +46,7 @@ procesos
       sino
         vaciarBolsa(flores,papeles)
     Pos(avIni,caIni)
-    {LiberarEsquina(av,ca)}
+    LiberarEsquina(av,ca)
   fin
 areas
   areaTrabajo: AreaPC (2,2,100,100)
@@ -66,7 +69,7 @@ robots
       RecibirMensaje(av,jefe)
       RecibirMensaje(ca,jefe)
       procesarEsquina(tareaNum,av,ca,flores,papeles)
-      EnviarMensaje(V,jefe)
+      {EnviarMensaje(V,jefe)}
       RecibirMensaje(tareaNum,jefe)
   fin
   robot Jefe
@@ -94,7 +97,7 @@ robots
         EnviarMensaje(av,t2)
         EnviarMensaje(ca,t2)
       {Espera}
-      RecibirMensaje(esperar,*)
+      {RecibirMensaje(esperar,*)}
     EnviarMensaje(4,t1)
     EnviarMensaje(4,t2)
   fin
