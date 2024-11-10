@@ -1,0 +1,115 @@
+programa ejercicio2
+procesos
+  proceso recolectarFlores(ES cant: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant := cant + 1
+  fin
+  proceso depositarFlores(ES cant:numero)
+  comenzar
+    repetir cant
+      depositarFlor
+    cant := 0
+  fin
+  proceso comunicar(E id:numero)
+  variables
+    esperar:boolean
+  comenzar
+    si(id=1)
+      EnviarMensaje(V,recolector2)
+      EnviarMensaje(V,recolector3)
+    sino
+      si(id=2)
+        EnviarMensaje(V,recolector1)
+        EnviarMensaje(V,recolector3)
+      sino
+        EnviarMensaje(V,recolector1)
+        EnviarMensaje(V,recolector2)
+    repetir 2
+      RecibirMensaje(esperar,*)
+  fin
+  proceso almacenarEnEsquina(E av:numero;E ca:numero;ES cant:numero)
+  variables
+    avIni,caIni:numero
+  comenzar
+    avIni := PosAv
+    caIni := PosCa
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    depositarFlores(cant)
+    Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+  fin
+  proceso contabilizarEnEsquina(E av:numero;E ca:numero;ES cant:numero)
+  variables
+    avIni,caIni:numero
+  comenzar
+    avIni:=PosAv
+    caIni:=PosCa
+    Pos(av,ca)
+    recolectarFlores(cant)
+    Pos(avIni,caIni)
+  fin
+areas
+  almacen: AreaC (50,50,50,50)
+  pista1: AreaP(1,1,100,1)
+  pista2: AreaP(1,2,100,2)
+  pista3: AreaP(1,3,100,3)
+  puesto: AreaP(1,4,1,4)
+robots
+  robot Recolector
+  variables
+    id:numero
+    esperar:boolean
+    flores:numero
+    esperarEn:numero
+  comenzar
+    flores:=0
+    RecibirMensaje(id,fiscal)
+    derecha
+    esperarEn := PosAv+10
+    mientras(PosAv<100)
+      si(PosAv<esperarEn)
+        recolectarFlores(flores)
+        mover
+      sino
+        comunicar(id)
+        esperarEn := PosAv+10
+    recolectarFlores(flores)
+    almacenarEnEsquina(50,50,flores)
+    EnviarMensaje(V,fiscal)
+  fin
+  robot Fiscal
+  variables
+    flores:numero
+    listo:boolean
+  comenzar
+    flores := 0
+    EnviarMensaje(1,recolector1)
+    EnviarMensaje(2,recolector2)
+    EnviarMensaje(3,recolector3)
+    repetir 3
+      RecibirMensaje(listo,*)
+    contabilizarEnEsquina(50,50,flores)
+    Informar(flores)
+  fin
+variables
+  recolector1: Recolector
+  recolector2: Recolector
+  recolector3: Recolector
+  fiscal: Fiscal
+comenzar
+  AsignarArea(recolector1, pista1)
+  AsignarArea(recolector2, pista2)
+  AsignarArea(recolector3, pista3)
+  AsignarArea(recolector1, almacen)
+  AsignarArea(recolector2, almacen)
+  AsignarArea(recolector3, almacen)
+  AsignarArea(fiscal, puesto)
+  AsignarArea(fiscal, almacen)
+  Iniciar(recolector1, 1,1)
+  Iniciar(recolector2, 1,2)
+  Iniciar(recolector3, 1,3)
+  Iniciar(fiscal,1,4)
+fin

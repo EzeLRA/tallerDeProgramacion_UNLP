@@ -1,0 +1,91 @@
+programa ejercicio3
+procesos
+  proceso juntarFlores(ES cant: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant := cant + 1
+  fin
+  proceso depositarFlores(ES cant:numero)
+  comenzar
+    repetir cant
+      depositarFlor
+    cant := 0
+  fin
+  proceso guardarFloresEn(E av:numero;E ca:numero;ES cant:numero)
+  variables
+    avIni,caIni:numero
+  comenzar
+    avIni := PosAv
+    caIni := PosCa
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    depositarFlores(cant)
+    Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+  fin
+  proceso juntarFloresEn(E av:numero;E ca:numero;ES cant:numero)
+  variables
+    avIni,caIni:numero
+  comenzar
+    avIni := PosAv
+    caIni := PosCa
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    juntarFlores(cant)
+    Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+  fin
+areas
+  pista1: AreaP (1,3,100,3)
+  pista2: AreaP (1,4,100,4)
+  puesto: AreaP (1,5,1,5)
+  almacen: AreaC (10,10,10,10)
+robots
+  robot recolector
+  variables
+    flores:numero
+    saltarEn:numero
+  comenzar
+    flores := 0
+    saltarEn:=PosAv+15
+    derecha
+    mientras(PosAv<100)
+      si(PosAv<saltarEn)&(flores<10)
+        juntarFlores(flores)
+        mover
+      sino
+        guardarFloresEn(10,10,flores)
+        saltarEn:=PosAv+15
+        EnviarMensaje(F,c)
+    EnviarMensaje(V,c)
+  fin
+  robot cosechador
+  variables
+    flores:numero
+    terminar:boolean
+  comenzar
+    flores:=0
+    RecibirMensaje(terminar,*)
+    mientras(terminar=F)
+      juntarFloresEn(10,10,flores)
+      RecibirMensaje(terminar,*)
+    RecibirMensaje(terminar,*)
+    juntarFloresEn(10,10,flores)
+    Informar(flores)
+  fin
+variables
+  r1: recolector
+  r2: recolector
+  c: cosechador
+comenzar
+  AsignarArea(r1, pista1)
+  AsignarArea(r2, pista2)
+  AsignarArea(r1, almacen)
+  AsignarArea(r2, almacen)
+  AsignarArea(c, puesto)
+  AsignarArea(c, almacen)
+  Iniciar(r1, 1,3)
+  Iniciar(r2, 1,4)
+  Iniciar(c, 1,5)
+fin

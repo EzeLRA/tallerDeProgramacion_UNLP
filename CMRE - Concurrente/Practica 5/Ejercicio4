@@ -1,0 +1,123 @@
+programa ejercicio4
+procesos
+  proceso juntarFlores(ES cant:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant := cant + 1
+  fin
+  proceso depositarFlores(ES cant:numero)
+  comenzar
+    repetir cant
+      depositarFlor
+    cant := 0
+  fin
+  proceso terminarTarea
+  comenzar
+    EnviarMensaje(F,f1)
+    EnviarMensaje(F,f2)
+    EnviarMensaje(F,f3)
+  fin
+  proceso enviarCoordenadasAle(E x:numero;E y:numero;E id:numero)
+  variables
+    av,ca:numero
+  comenzar
+    Random(av,x,y)
+    Random(ca,x,y)
+    si(id=1)
+      EnviarMensaje(V, f1)
+      EnviarMensaje(av,f1)
+      EnviarMensaje(ca,f1)
+    sino
+      si(id=2)
+        EnviarMensaje(V, f2)
+        EnviarMensaje(av,f2)
+        EnviarMensaje(ca,f2)
+      sino
+        EnviarMensaje(V, f3)
+        EnviarMensaje(av,f3)
+        EnviarMensaje(ca,f3)
+  fin
+  proceso procesarEsquina(E av:numero;E ca:numero;ES cant:numero)
+  variables
+    avIni,caIni:numero
+  comenzar
+    avIni := PosAv
+    caIni := PosCa
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    juntarFlores(cant)
+    Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+  fin
+  proceso almacenarEsquina(E av:numero;E ca:numero;ES cant:numero)
+  variables
+    avIni,caIni:numero
+  comenzar
+    avIni := PosAv
+    caIni := PosCa
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    depositarFlores(cant)
+    Pos(avIni,caIni)
+    LiberarEsquina(av,ca)
+  fin
+areas
+  puesto1: AreaP (1,1,1,1)
+  puesto2: AreaP (2,1,2,1)
+  puesto3: AreaP (3,1,3,1)
+  puestoF: AreaP (4,1,4,1)
+  almacen: AreaC (10,10,10,10)
+  areaProceso: AreaPC (40,40,60,60)
+robots
+  robot florero
+  variables
+    flores:numero
+    av,ca:numero
+    continuar:boolean
+  comenzar
+    flores:=0
+    RecibirMensaje(continuar,fiscal)
+    mientras(continuar)
+      RecibirMensaje(av,fiscal)
+      RecibirMensaje(ca,fiscal)
+      procesarEsquina(av,ca,flores)
+      EnviarMensaje(flores,fiscal)
+      RecibirMensaje(continuar,fiscal)
+    almacenarEsquina(10,10,flores)
+  fin
+  robot Fiscal
+  variables
+    cant,flores:numero
+    ids:numero
+  comenzar
+    flores := 0
+    repetir 8
+      Random(ids,1,3)
+      enviarCoordenadasAle(40,60,ids)
+      RecibirMensaje(cant,*)
+      flores := flores + cant
+    terminarTarea
+    Informar(flores)
+  fin
+variables
+  f1: florero
+  f2: florero
+  f3: florero
+  fiscal: Fiscal
+comenzar
+  AsignarArea(f1, puesto1)
+  AsignarArea(f2, puesto2)
+  AsignarArea(f3, puesto3)
+  AsignarArea(f1, areaProceso)
+  AsignarArea(f2, areaProceso)
+  AsignarArea(f3, areaProceso)
+  AsignarArea(f1, almacen)
+  AsignarArea(f2, almacen)
+  AsignarArea(f3, almacen) 
+  AsignarArea(fiscal,puestoF)
+  Iniciar(f1, 1,1)
+  Iniciar(f2, 2,1)
+  Iniciar(f3, 3,1)
+  Iniciar(fiscal,4,1)
+fin

@@ -1,0 +1,172 @@
+{Carrera de dos equipos}
+programa ejercicio1
+procesos
+  {Equipo flores}
+  proceso recolectarFlores(ES cant: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant := cant + 1
+  fin
+  {Equipo papeles}
+  proceso recolectarPapeles(ES cant:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cant := cant + 1
+  fin
+areas
+  {Floreros}
+  pistaFlores1a: AreaP (2,1,2,97)
+  pistaFlores1b: AreaP (2,100,2,100)
+  pistaFlores2a: AreaP (3,1,3,97)
+  pistaFlores2b: AreaP (3,100,3,100)
+  {Papeleros}
+  pistaPapeles1b: AreaP (1,98,1,98)
+  pistaPapeles1a: AreaP (4,98,100,98)
+  pistaPapeles2b: AreaP (1,99,1,99)
+  pistaPapeles2a: AreaP (4,99,100,99)
+  {Restriccion}
+  areaPeligro: AreaPC (2,98,3,99)
+  puesto : AreaP (1,1,1,1) 
+robots
+  robot florero1
+  variables
+    flores:numero
+  comenzar
+    flores := 0
+    repetir 96
+      recolectarFlores(flores)
+      mover
+    BloquearEsquina(PosAv,PosCa+1)
+    mover
+    recolectarFlores(flores)
+    BloquearEsquina(PosAv,PosCa+1)
+    mover
+    LiberarEsquina(PosAv,PosCa-1)
+    recolectarFlores(flores)
+    mover
+    LiberarEsquina(PosAv,PosCa-1)
+    recolectarFlores(flores)
+    EnviarMensaje(flores,R2)
+  fin
+  robot florero2
+  variables
+    id:numero
+    flores:numero
+  comenzar
+    RecibirMensaje(id,fiscal)
+    RecibirMensaje(flores,R1)
+    repetir 96
+      recolectarFlores(flores)
+      mover
+    BloquearEsquina(PosAv,PosCa+1)
+    mover
+    recolectarFlores(flores)
+    BloquearEsquina(PosAv,PosCa+1)
+    mover
+    LiberarEsquina(PosAv,PosCa-1)
+    recolectarFlores(flores)
+    mover
+    LiberarEsquina(PosAv,PosCa-1)
+    recolectarFlores(flores)
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(flores,fiscal)
+  fin
+  robot papelero1
+  variables
+    papeles : numero
+  comenzar
+    papeles := 0
+    derecha
+    recolectarPapeles(papeles)
+    BloquearEsquina(PosAv+1,PosCa)
+    mover
+    recolectarPapeles(papeles)
+    BloquearEsquina(PosAv+1,PosCa)
+    mover
+    LiberarEsquina(PosAv-1,PosCa)
+    recolectarPapeles(papeles)
+    mover
+    LiberarEsquina(PosAv-1,PosCa)
+    repetir 96
+      recolectarPapeles(papeles)
+      mover
+    recolectarPapeles(papeles)
+    EnviarMensaje(papeles,A2)
+  fin
+  robot papelero2
+  variables
+    id: numero
+    papeles : numero
+  comenzar
+    RecibirMensaje(id,fiscal)
+    derecha
+    RecibirMensaje(papeles,A1)
+    recolectarPapeles(papeles)
+    BloquearEsquina(PosAv+1,PosCa)
+    mover
+    recolectarPapeles(papeles)
+    BloquearEsquina(PosAv+1,PosCa)
+    mover
+    LiberarEsquina(PosAv-1,PosCa)
+    recolectarPapeles(papeles)
+    mover
+    LiberarEsquina(PosAv-1,PosCa)
+    repetir 96
+      recolectarPapeles(papeles)
+      mover
+    recolectarPapeles(papeles)
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(papeles,fiscal)
+  fin
+  robot Fiscal
+  variables
+    ids:numero
+    cant:numero
+    cantMax:numero
+    idMax:numero
+  comenzar
+    EnviarMensaje(1,R2)
+    EnviarMensaje(2,A2)
+    cantMax := -1
+    repetir 2
+      RecibirMensaje(ids,*)
+      si(ids=1)
+        RecibirMensaje(cant,R2)
+      sino
+        RecibirMensaje(cant,A2)
+      si(cantMax < cant)
+        cantMax := cant
+        idMax := ids
+    Informar(idMax)
+    Informar(cantMax)
+  fin
+variables
+  R1: florero1
+  R2: florero2
+  A1: papelero1
+  A2 : papelero2
+  fiscal : Fiscal
+comenzar
+  {Pista 1}
+  AsignarArea(R1, pistaFlores1a)
+  AsignarArea(R1, pistaFlores1b)
+  AsignarArea(R1, areaPeligro)
+  AsignarArea(R2, pistaFlores2a)
+  AsignarArea(R2, pistaFlores2b)
+  AsignarArea(R2, areaPeligro)
+  {Pista 2}
+  AsignarArea(A1, pistaPapeles1a)
+  AsignarArea(A1, pistaPapeles1b)
+  AsignarArea(A1, areaPeligro)
+  AsignarArea(A2, pistaPapeles2a)
+  AsignarArea(A2, pistaPapeles2b)
+  AsignarArea(A2, areaPeligro)
+  AsignarArea(fiscal, puesto)
+  Iniciar(R1, 2,1)
+  Iniciar(R2, 3,1)
+  Iniciar(A1, 1,98)
+  Iniciar(A2, 1,99)
+  Iniciar(fiscal, 1,1)
+fin
