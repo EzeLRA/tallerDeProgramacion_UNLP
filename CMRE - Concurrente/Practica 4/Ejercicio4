@@ -79,6 +79,8 @@ robots
     ca: numero
   comenzar
     tareasCant := 8
+    {Eliminar la función de Ids del algoritmo}
+    {Basarse en el codigo de Juampi Conejera}
     EnviarMensaje(1,t1)
     EnviarMensaje(2,t2)
     mientras (tareasCant>0)
