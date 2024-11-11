@@ -1,0 +1,107 @@
+programa ejercicio5
+procesos
+  {Procesos para servidor}
+  proceso enviarIds
+  comenzar
+    EnviarMensaje(1,cliente1)
+    EnviarMensaje(2,cliente2)
+    EnviarMensaje(3,cliente3)
+  fin
+  proceso juntarPapeles(E cant:numero)
+  comenzar
+    repetir cant
+      tomarPapel
+  fin
+  proceso guardarEnAlmacen(E cant:numero)
+  variables
+    avIni:numero
+    caIni:numero
+  comenzar
+    avIni:=PosAv
+    caIni:=PosCa
+    BloquearEsquina(100,1)
+    Pos(100,1)
+    repetir cant
+      depositarPapel
+    Pos(avIni,caIni)
+    LiberarEsquina(100,1)
+  fin
+  {Procesos para cliente}
+  proceso traerPapel
+  variables
+    avIni:numero
+    caIni:numero
+  comenzar
+    avIni:=PosAv
+    caIni:=PosCa
+    BloquearEsquina(100,1)
+    Pos(100,1)
+    si HayPapelEnLaEsquina
+      tomarPapel
+    Pos(avIni,caIni)
+    LiberarEsquina(100,1)
+    si HayPapelEnLaBolsa
+      depositarPapel
+  fin
+areas
+  almacen: AreaC (100,1,100,1)
+  puesto1: AreaP (10,1,10,1)
+  puesto2: AreaP (11,1,11,1)
+  puesto3: AreaP (12,1,12,1)
+  puestoF: AreaP (13,1,13,1)
+robots  
+  robot Servidor 
+  variables
+    cant:numero
+    ids:numero
+    funcionando:numero
+  comenzar
+    enviarIds
+    funcionando:=3
+    mientras(funcionando>0)
+      RecibirMensaje(ids,*)
+      si(ids>0)
+        Random(cant,1,5)
+        juntarPapeles(cant)
+        guardarEnAlmacen(cant)
+        si(ids=1)
+          EnviarMensaje(cant,cliente1)
+        sino
+          si(ids=2)
+            EnviarMensaje(cant,cliente2)
+          sino
+            EnviarMensaje(cant,cliente3)
+      sino
+        funcionando:=funcionando-1
+  fin
+  robot Cliente
+  variables
+    id,cant:numero
+  comenzar
+    RecibirMensaje(id,servidor)
+    repetir 4
+      EnviarMensaje(id,servidor)
+      RecibirMensaje(cant,servidor)
+      repetir cant
+        traerPapel
+    EnviarMensaje(0,servidor)    
+  fin
+variables
+  cliente1: Cliente
+  cliente2: Cliente
+  cliente3: Cliente
+  servidor: Servidor
+comenzar
+  AsignarArea(cliente1, puesto1)
+  AsignarArea(cliente1, almacen)
+  AsignarArea(cliente2, puesto2)
+  AsignarArea(cliente2, almacen)
+  AsignarArea(cliente3, puesto3)
+  AsignarArea(cliente3, almacen)
+  AsignarArea(servidor, puestoF)
+  AsignarArea(servidor, almacen)
+  Iniciar(cliente1, 10,1)
+  Iniciar(cliente2, 11,1)
+  Iniciar(cliente3, 12,1)
+  Iniciar(servidor, 13,1)
+fin

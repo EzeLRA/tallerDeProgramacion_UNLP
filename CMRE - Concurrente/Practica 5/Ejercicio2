@@ -12,7 +12,7 @@ procesos
       depositarFlor
     cant := 0
   fin
-  proceso comunicar(E id:numero)
+  proceso comunicar_Esperar(E id:numero)
   variables
     esperar:boolean
   comenzar
@@ -61,7 +61,6 @@ robots
   robot Recolector
   variables
     id:numero
-    esperar:boolean
     flores:numero
     esperarEn:numero
   comenzar
@@ -74,7 +73,7 @@ robots
         recolectarFlores(flores)
         mover
       sino
-        comunicar(id)
+        comunicar_Esperar(id)
         esperarEn := PosAv+10
     recolectarFlores(flores)
     almacenarEnEsquina(50,50,flores)
