@@ -1,0 +1,124 @@
+programa parcial7
+procesos
+  proceso juntarFlores(ES cant:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant:= cant + 1 
+  fin
+  proceso hacerCuadrado(E tam: numero;ES cant:numero)
+  comenzar
+    repetir 4
+      repetir tam  
+        juntarFlores(cant)
+        mover
+      derecha
+  fin
+  proceso guardarEnAlmacen
+  variables
+    avIni:numero
+    caIni:numero
+  comenzar
+    avIni := PosAv
+    caIni := PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    si HayFlorEnLaBolsa
+      depositarFlor
+    Pos(avIni,caIni)
+    LiberarEsquina(50,50)
+  fin
+  proceso retirarFlores(E cant:numero)
+  variables
+    avIni:numero
+    caIni:numero
+  comenzar
+    avIni:=PosAv
+    caIni:=PosCa
+    repetir cant  
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      si HayFlorEnLaEsquina
+        tomarFlor
+      Pos(avIni,caIni)
+      LiberarEsquina(50,50)
+  fin
+areas
+  puesto: AreaP (100,100,100,100)
+  area1: AreaP (1,1,7,25)
+  area2: AreaP (10,1,16,25)
+  area3: AreaP (20,1,26,25)
+  almacen: AreaC (50,50,50,50)
+robots
+  robot Recolector
+  variables
+    flores,floresT:numero  
+    id,tam : numero  
+  comenzar
+    flores := 0
+    floresT := 0
+    RecibirMensaje(id,jefe)
+    RecibirMensaje(tam,jefe)
+    repetir 3
+      hacerCuadrado(tam,flores)
+      floresT := floresT + flores
+      repetir flores
+        guardarEnAlmacen
+      EnviarMensaje(flores,jefe)
+      Pos(PosAv,PosCa+(tam+1))
+    EnviarMensaje(id,jefe)
+    EnviarMensaje(floresT,jefe)
+  fin
+  robot Jefe
+  variables
+    ids,cant:numero
+    tam:numero
+    idMax,cantMax:numero
+  comenzar
+    cantMax := -1
+    EnviarMensaje(1,recolector1)
+    EnviarMensaje(2,recolector2)
+    EnviarMensaje(3,recolector3)
+    Random(tam,1,6)
+    EnviarMensaje(tam,recolector1)
+    Random(tam,1,6)
+    EnviarMensaje(tam,recolector2)
+    Random(tam,1,6)
+    EnviarMensaje(tam,recolector3)
+    repetir 9
+      RecibirMensaje(cant,*)
+      retirarFlores(cant)
+    repetir 3
+      RecibirMensaje(ids,*)
+      si(ids=1)
+        RecibirMensaje(cant,recolector1)
+      sino
+        si(ids=2)
+          RecibirMensaje(cant,recolector2)
+        sino  
+          RecibirMensaje(cant,recolector3)
+      si(cantMax<cant)
+        cantMax := cant
+        idMax := ids
+    Informar(idMax)  
+    Informar(cantMax)
+  fin
+variables
+  recolector1: Recolector
+  recolector2: Recolector
+  recolector3: Recolector
+  jefe: Jefe
+comenzar
+  AsignarArea(recolector1, area1)
+  AsignarArea(recolector1, almacen)
+  AsignarArea(recolector2, area2)
+  AsignarArea(recolector2, almacen)
+  AsignarArea(recolector3, area3)
+  AsignarArea(recolector3, almacen)
+  AsignarArea(jefe, puesto)
+  AsignarArea(jefe, almacen)
+  Iniciar(recolector1, 1,1)
+  Iniciar(recolector2, 10,1)
+  Iniciar(recolector3, 20,1)
+  Iniciar(jefe,100,100)
+fin

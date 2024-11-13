@@ -1,0 +1,103 @@
+programa parcial5
+procesos
+  {Escondedor}
+  proceso esconderFlorEn(E x: numero;E y:numero)
+  variables
+    posX,posY:numero
+    avIni,caIni:numero
+  comenzar
+    avIni:= PosAv
+    caIni:= PosCa
+    Random(posX,x,y)
+    Random(posY,x,y)
+    Pos(posX,posY)
+    depositarFlor
+    Pos(avIni,caIni)
+  fin
+  {Buscadores}
+  proceso buscarEn(E x:numero;E y:numero;ES encontrado:boolean)
+  variables
+    posX,posY:numero
+    avIni,caIni:numero
+  comenzar
+    avIni:= PosAv
+    caIni:= PosCa
+    Random(posX,x,y)
+    Random(posY,x,y)
+    BloquearEsquina(posX,posY)
+    Pos(posX,posY)
+    encontrado := HayFlorEnLaEsquina
+    Pos(avIni,caIni)
+    LiberarEsquina(posX,posY)
+  fin
+areas
+  areaB: AreaPC (9,9,14,14)
+  puestoF: AreaP (1,1,1,1)
+  puesto1: AreaP (2,2,2,2)
+  puesto2: AreaP (3,3,3,3)
+  puesto3: AreaP (4,4,4,4)
+robots
+  robot Escondedor
+  variables
+    ganador,ids:numero
+    encontro:boolean
+    respuesta:boolean
+  comenzar
+    {Se asume que habra siempre una flor en su puesto}
+    tomarFlor
+    esconderFlorEn(10,13)
+    EnviarMensaje(1,buscador1)
+    EnviarMensaje(2,buscador2)
+    EnviarMensaje(3,buscador3)
+    encontro:=F
+    mientras(encontro=F)
+      repetir 3
+        RecibirMensaje(ids,*)
+        si(ids=1)
+          RecibirMensaje(respuesta,buscador1)
+        sino
+          si(ids=2)
+            RecibirMensaje(respuesta,buscador2)
+          sino
+            RecibirMensaje(respuesta,buscador3)
+        si(respuesta=V)
+          encontro:=V
+          ganador:=ids
+      EnviarMensaje(encontro,buscador1)
+      EnviarMensaje(encontro,buscador2)
+      EnviarMensaje(encontro,buscador3)
+    Informar(ganador)
+  fin
+  robot Buscador
+  variables
+    buscar:boolean
+    hallado:boolean
+    id:numero
+  comenzar
+    RecibirMensaje(id,escondedor)
+    buscar := V
+    mientras(buscar)
+      buscarEn(10,13,hallado)
+      EnviarMensaje(id,escondedor)
+      EnviarMensaje(hallado,escondedor)
+      RecibirMensaje(buscar,escondedor)
+  fin
+variables
+  escondedor : Escondedor
+  buscador1 : Buscador
+  buscador2 : Buscador
+  buscador3 : Buscador
+comenzar
+  AsignarArea(escondedor, puestoF)
+  AsignarArea(escondedor, areaB)
+  AsignarArea(buscador1, puesto1)
+  AsignarArea(buscador2, puesto2)
+  AsignarArea(buscador3, puesto3)
+  AsignarArea(buscador1, areaB)
+  AsignarArea(buscador2, areaB)
+  AsignarArea(buscador3, areaB)
+  Iniciar(escondedor, 1,1)
+  Iniciar(buscador1, 2,2)
+  Iniciar(buscador2, 3,3)
+  Iniciar(buscador3, 4,4)
+fin

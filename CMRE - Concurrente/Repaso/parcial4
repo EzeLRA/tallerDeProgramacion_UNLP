@@ -1,0 +1,122 @@
+programa parcial4
+procesos
+  proceso juntarFlores(ES cant: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant := cant + 1
+  fin
+  proceso juntarPapeles(ES cant: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cant := cant + 1
+  fin
+  proceso ocuparEsquina1(E saltoX:numero;E saltoY:numero;ES flores:numero)
+  comenzar
+    BloquearEsquina(6,6)
+    Pos(6,6)
+    juntarFlores(flores)
+    Pos(saltoX,saltoY)
+    LiberarEsquina(6,6)
+  fin
+  proceso ocuparEsquina2(E saltoX:numero;E saltoY:numero;ES papeles:numero)
+  comenzar
+    BloquearEsquina(6,6)
+    Pos(6,6)
+    juntarPapeles(papeles)
+    Pos(saltoX,saltoY)
+    LiberarEsquina(6,6)
+  fin
+  proceso avanzar(ES flores:numero)
+  comenzar
+    repetir 4
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+  fin
+  proceso volver(ES papeles:numero)
+  comenzar
+    repetir 4
+      juntarPapeles(papeles)
+      mover
+    juntarPapeles(papeles)
+  fin
+areas
+  pista1a: AreaP (1,5,5,5)
+  pista1b: AreaP (7,7,11,7)
+  pista2a: AreaP (1,7,5,7)
+  pista2b: AreaP (7,5,11,5)
+  puntoCritico: AreaPC (6,6,6,6)
+  puestoF: AreaP (1,6,1,6)
+robots
+  robot Competidor
+  variables
+    papeles,flores:numero
+    saltoX,saltoY:numero
+    id:numero
+  comenzar
+    flores:=0
+    papeles:=0
+    derecha
+    RecibirMensaje(id,fiscal)
+    {Ida}
+    avanzar(flores)
+    si(id=1)
+      ocuparEsquina1(PosAv+2,PosCa+2,flores)
+    sino
+      ocuparEsquina1(PosAv+2,PosCa-2,flores)
+    avanzar(flores)
+    {reporte}
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(flores,fiscal)
+    {vuelta}
+    repetir 2
+      derecha
+    volver(papeles)
+    si(id=1)
+      ocuparEsquina2(PosAv-2,PosCa-2,papeles)
+    sino
+      ocuparEsquina2(PosAv-2,PosCa+2,papeles)
+    volver(papeles)
+    {reportar}
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(papeles,fiscal)
+  fin
+  robot Fiscal
+  variables
+    ids,cant:numero
+    idMax,cantMax:numero
+  comenzar
+    EnviarMensaje(1,competidor1)
+    EnviarMensaje(2,competidor2)
+    repetir 2
+      cantMax:=-1
+      repetir 2
+        RecibirMensaje(ids,*)
+        si(ids=1)
+          RecibirMensaje(cant,competidor1)
+        sino
+          RecibirMensaje(cant,competidor2)
+        si(cant>cantMax)
+          cantMax:=cant
+          idMax := ids
+      Informar(idMax)
+      Informar(cantMax)
+  fin
+variables
+  competidor1: Competidor
+  competidor2: Competidor
+  fiscal: Fiscal
+comenzar
+  AsignarArea(competidor1, pista1a)
+  AsignarArea(competidor1, pista1b)
+  AsignarArea(competidor2, pista2a)
+  AsignarArea(competidor2, pista2b)
+  AsignarArea(competidor1, puntoCritico)
+  AsignarArea(competidor2, puntoCritico)
+  AsignarArea(fiscal,puestoF)
+  Iniciar(competidor1, 1,5)
+  Iniciar(competidor2, 1,7)
+  Iniciar(fiscal,1,6)
+fin
